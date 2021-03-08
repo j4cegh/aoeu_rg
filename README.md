@@ -1,5 +1,4 @@
-# aoeu_rg
-aoeu's rhythm game
+# aoeu's rhythm game
 
 A "online" rhythm game programmed in C.
 It has Ouendan and Mania modes so far.
