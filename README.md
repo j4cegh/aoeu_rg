@@ -6,7 +6,7 @@ It has Ouendan and Mania modes so far.
 # Compiling
 If you're on Windows, you can use Visual Studio 2019 and it will work out of the box, nothing else is required.
 
-On Linux, cd into the linux/ directory and type "make d".
+On Linux, cd into the linux/ directory and type "make d -j4".
 Make sure all the following libraries but the specific Windows ones are installed.
 
 Libraries used:
