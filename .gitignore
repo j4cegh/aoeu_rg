@@ -1,0 +1,7 @@
+.vs/
+data/
+logs/
+server_data/
+songs/
+x64/
+/options.cfg
