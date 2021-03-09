@@ -383,7 +383,7 @@ void tick_fade()
 						}
 					}
 
-					if(old_screen == screen_song_select && (rg.to_screen == screen_player || rg.to_screen == screen_editor /*|| rg.to_screen == screen_view_scores*/))
+					if(old_screen == screen_song_select && (rg.to_screen == screen_player || rg.to_screen == screen_editor))
 					{
 						if(ss->load_next != NULL)
 						{
@@ -395,10 +395,7 @@ void tick_fade()
 								rg.screen = screen_editor;
 								rg.to_screen = screen_editor;
 							}
-							else
-							{
-								song_preview_play(rg.song);
-							}
+							else song_preview_play(rg.song);
 							ss->load_next = NULL;
 						}
 					}
@@ -421,13 +418,6 @@ void tick_fade()
 							song_load(rg.song);
 						}
 #endif
-						/*
-						if(old_screen == screen_props)
-						{
-							song_all_sliders_del_textures(rg.song);
-							song_reload_bg(rg.song);
-						}
-						*/
 
 						if(old_screen != screen_timing_sections && old_screen != screen_player)
 						{
