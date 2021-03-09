@@ -136,10 +136,10 @@ void gui_win_render(gui_win *ptr)
 	
 	if(!ptr->allow_drag_off_screen && rg.win_width > ptr->size.x && rg.win_height > ptr->size.y) gui_win_move(ptr, clamp(ptr->pos.x, BORDER_THICKNESS, rg.win_width - ptr->size.x - BORDER_THICKNESS), clamp(ptr->pos.y, BORDER_THICKNESS, rg.win_height - (ptr->size.y) - BORDER_THICKNESS));
 	
+	gui_win_check_grab(ptr);
+
 	float_rect brect = FLOATRECT(ptr->pos.x, ptr->pos.y, ptr->size.x, ptr->size.y);
 	GL_OLBOX(brect, ptr->border_color, ptr->bg_color, 1);
-
-	gui_win_check_grab(ptr);
 
 	ptr->render_update_func(ptr);
 
