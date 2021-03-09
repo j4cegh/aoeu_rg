@@ -123,7 +123,7 @@ void gui_win_check_grab(gui_win *ptr)
 	if(left_click && (ptr->is_hovered))
 		gui_win_man_set_active(ptr);
 
-	if(ptr->is_hovered && left_pressed && (ptr == gui_win_man_get_active() || ptr->not_in_win_man))
+	if(ptr->is_handle_hovered && left_pressed && (ptr == gui_win_man_get_active() || ptr->not_in_win_man))
 	{
 		gui_win_is_grabbed = 1;
 		gui_win_move(ptr, mouse_x - ptr->rel_handle_mx, mouse_y - ptr->rel_handle_my);
