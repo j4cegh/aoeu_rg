@@ -354,6 +354,7 @@ void tick_fade()
 					
 					if(rg.to_screen == screen_song_select)
 					{
+						if(old_screen == screen_editor) song_load(rg.song);
 						if(rg.song->music_state == song_paused) song_play(rg.song);
 						song_select_refresh(1);
 						timer_restart(ss->scroll_clock);
