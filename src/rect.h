@@ -27,6 +27,9 @@ float_rect FLOATRECT(float left, float top, float width, float height);
 #define FR_CONTAINS(rect, x, y) \
     (x >= rect.left && x <= rect.width && y >= rect.top && y <= rect.height)
 
+#define FR_CONTAINS2(rect, x, y) \
+	(x >= rect.left && x <= rect.left + rect.width && y >= rect.top && y <= rect.top + rect.height)
+
 #define FR_INTERSECTS_4P(rect, rect2) \
 ( \
     FR_CONTAINS(rect, rect2.left, rect2.top) || \
