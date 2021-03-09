@@ -1457,7 +1457,11 @@ int main(int argc, char *argv[])
 				free(stats_str);
 			}
 
-			text3_fmt(rg.win_width, rg.win_height, rg.win_width, 255, origin_right, origin_bottom, text3_justification_right, "%s", "~uprivate debug build\nplease do not redistribute!\naoeu's rhythm game is copyright (c) aoeu 2020-2021");
+			float_rect ltr;
+			char *dev_url = "https://github.com/aoeu1/aoeu_rg/";
+			text3_fmt_rect(ltr, rg.win_width, rg.win_height, rg.win_width, 255, origin_right, origin_bottom, text3_justification_right, "~u%s", dev_url);
+			char ltri = FR_CONTAINS2(ltr, mouse_x, mouse_y);
+			if(ltri && left_click == 1) open_url("https://github.com/aoeu1/aoeu_rg/");
 		}
 		else if(rg.screen == screen_song_select)
 		{
