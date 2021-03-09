@@ -1246,8 +1246,8 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 				if(space_free)
 				{
 					object_type mode = ptr->editor_placement_type;
-					if(rg.mode == object_circle) song_add_circle(ptr, snap_x, snap_y, nearest_beat);
-					else if(rg.mode == object_slider)
+					if(mode == object_circle) song_add_circle(ptr, snap_x, snap_y, nearest_beat);
+					else if(mode == object_slider)
 					{
 						object *obj = object_init(snap_x, snap_y, object_slider, nearest_beat, 0, ptr);
 						list_push_front(ptr->all_objects, obj);
@@ -1258,7 +1258,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 						obj->is_new = 1;
 						ptr->selected_object = obj;
 					}
-					else if(rg.mode == object_spinner)
+					else if(mode == object_spinner)
 					{
 						object *obj = object_init(SONG_PFW / 2, SONG_PFH / 2, object_spinner, nearest_beat, 5000, ptr);
 						list_push_front(ptr->all_objects, obj);
