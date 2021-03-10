@@ -1900,14 +1900,14 @@ int main(int argc, char *argv[])
 		
 		if(rg.kp[SDL_SCANCODE_LCTRL])
 		{
-			GL_LINE(V2F(0, rg.win_height_mid), V2F(rg.win_width, rg.win_height_mid), col_yellow);
-			GL_LINE(V2F(rg.win_width_mid, 0), V2F(rg.win_width_mid, rg.win_height), col_yellow);
+			GL_DRAWLINE(V2F(0, rg.win_height_mid), V2F(rg.win_width, rg.win_height_mid), col_yellow);
+			GL_DRAWLINE(V2F(rg.win_width_mid, 0), V2F(rg.win_width_mid, rg.win_height), col_yellow);
 
-			GL_LINE(V2F(0, rg.win_height_mid * 0.5), V2F(rg.win_width, rg.win_height_mid * 0.5), col_yellow);
-			GL_LINE(V2F(rg.win_width_mid * 0.5, 0), V2F(rg.win_width_mid * 0.5, rg.win_height), col_yellow);
+			GL_DRAWLINE(V2F(0, rg.win_height_mid * 0.5), V2F(rg.win_width, rg.win_height_mid * 0.5), col_yellow);
+			GL_DRAWLINE(V2F(rg.win_width_mid * 0.5, 0), V2F(rg.win_width_mid * 0.5, rg.win_height), col_yellow);
 
-			GL_LINE(V2F(0, rg.win_height_mid * 1.5), V2F(rg.win_width, rg.win_height_mid * 1.5), col_yellow);
-			GL_LINE(V2F(rg.win_width_mid * 1.5, 0), V2F(rg.win_width_mid * 1.5, rg.win_height), col_yellow);
+			GL_DRAWLINE(V2F(0, rg.win_height_mid * 1.5), V2F(rg.win_width, rg.win_height_mid * 1.5), col_yellow);
+			GL_DRAWLINE(V2F(rg.win_width_mid * 1.5, 0), V2F(rg.win_width_mid * 1.5, rg.win_height), col_yellow);
 		}
 #endif
 

@@ -45,8 +45,8 @@ void slider_bar_render(slider_bar *ptr)
 {
     float y = ptr->pos.y + (ptr->bar_size.y / 2);
     
-	GL_LINE(V2F(ptr->pos.x, y), V2F(ptr->pos.x + ptr->bar_size.x, y), col_white);
-	GL_LINE(V2F(ptr->pos.x + ptr->x_on_bar, ptr->pos.y), V2F(ptr->pos.x + ptr->x_on_bar, ptr->pos.y + SLIDER_BAR_HEIGHT), col_yellow);
+	GL_DRAWLINE(V2F(ptr->pos.x, y), V2F(ptr->pos.x + ptr->bar_size.x, y), col_white);
+	GL_DRAWLINE(V2F(ptr->pos.x + ptr->x_on_bar, ptr->pos.y), V2F(ptr->pos.x + ptr->x_on_bar, ptr->pos.y + SLIDER_BAR_HEIGHT), col_yellow);
 
     text_set_position(ptr->label, ptr->pos.x, ptr->pos.y - ptr->label->size.y);
     text_render(ptr->label);

@@ -14,7 +14,7 @@ DEFS_DEBUG_SERV = -DSERV
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image -lGL -lGLU -lGLEW -lcsfml-system -lcsfml-network -lbass -lbass_fx -lsodium -lm
 LIBS_SERV := -lSDL2 -lcsfml-system -lcsfml-network -lsodium -lm
 
-SDIR = ../src
+SDIR = src
 SRCS := $(wildcard $(SDIR)/*.c)
 $(info $(SRCS))
 SRCS_SERV_FILES := se_utils.c se_logger.c se_timer.c se_list.c rg_online_server.c rg_online_packet.c rg_online_db.c rg_replay.c rg_online_player.c rg_online_replay_list.c
@@ -26,9 +26,9 @@ CFLAGS_RELEASE_SERV := -Os -ffast-math
 CFLAGS_DEBUG_SERV := -g3
 
 LFLAGS_RELEASE := -s
-LFLAGS_DEBUG :=
+LFLAGS_DEBUG := 
 LFLAGS_RELEASE_SERV := -s
-LFLAGS_DEBUG_SERV :=
+LFLAGS_DEBUG_SERV := 
 
 OBJS_RELEASE := $(subst $(SDIR),$(ODIR_RELEASE),$(SRCS:.c=.o))
 OBJS_DEBUG := $(subst $(SDIR),$(ODIR_DEBUG),$(SRCS:.c=.o))

@@ -23,7 +23,7 @@ glBegin(GL_LINE_STRIP); \
 glEnd(); \
 }
 
-#define GL_LINE(p1, p2, col) \
+#define GL_DRAWLINE(p1, p2, col) \
 { \
 glColor4ub(color4_2func_alpha(col)); \
 glBegin(GL_LINES); \

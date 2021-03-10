@@ -1,4 +1,10 @@
 .vs/
+obj_debug/
+obj_release/
+/db
+/rb
+/dbs
+/rbs
 data/
 logs/
 server_data/
