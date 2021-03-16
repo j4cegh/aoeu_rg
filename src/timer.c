@@ -1,5 +1,9 @@
 #include "timer.h"
+#ifdef __APPLE__
+#include <mach/mach_time.h>
+#else
 #include <time.h>
+#endif
 #include <stdlib.h>
 #include "list.h"
 #include "utils.h"
@@ -9,11 +13,16 @@
 
 TIMER_VAR se_get_microseconds()
 {
-#ifdef USING_WINDOWS
+#if defined(USING_WINDOWS)
     LARGE_INTEGER frequency, time;
     QueryPerformanceFrequency(&frequency);
     QueryPerformanceCounter(&time);
     return 1000000 * time.QuadPart / frequency.QuadPart;
+#elif defined(__APPLE__)
+    static mach_timebase_info_data_t frequency = {0, 0};
+    if(frequency.denom == 0) mach_timebase_info(&frequency);
+    Uint64 nanoseconds = mach_absolute_time() * frequency.numer / frequency.denom;
+    return nanoseconds / 1000;
 #else
     struct timespec time;
     clock_gettime(1, &time);

@@ -19,7 +19,11 @@
 #include <SDL2/SDL_image.h>
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>

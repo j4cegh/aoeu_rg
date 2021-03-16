@@ -11,7 +11,12 @@ DEFS_DEBUG =
 DEFS_RELEASE_SERV = -DSERV -DNDEBUG -DRELEASE
 DEFS_DEBUG_SERV = -DSERV
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+LIBS := -framework OpenGL -lSDL2 -lSDL2_ttf -lSDL2_image -lGLEW -lcsfml-system -lcsfml-network -lbass -lbass_fx -lsodium -lm
+else
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image -lGL -lGLU -lGLEW -lcsfml-system -lcsfml-network -lbass -lbass_fx -lsodium -lm
+endif
 LIBS_SERV := -lSDL2 -lcsfml-system -lcsfml-network -lsodium -lm
 
 SDIR = src
