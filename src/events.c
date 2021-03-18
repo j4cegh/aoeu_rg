@@ -233,7 +233,7 @@ void normal_events(SDL_Event event)
 					rg.song->tl.timeline_scale += 0.025f;
 				rg.song->tl.timeline_scale = clamp(rg.song->tl.timeline_scale, 0.05f, 6.0f);
 			}
-			else if(!rg.kp[SDL_SCANCODE_LCTRL] && !rg.kp[SDL_SCANCODE_LSHIFT] && timer_name_bool("rsl", 8)) song_scroll(rg.song, -dist);
+			else if(!rg.kp[SDL_SCANCODE_LCTRL] && !rg.kp[SDL_SCANCODE_LSHIFT]) song_scroll(rg.song, -dist);
 		}
 	}
 }
