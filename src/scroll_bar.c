@@ -14,6 +14,7 @@ scroll_bar *scroll_bar_init(SCROLL_BAR_ARGS)
 	ret->vlim = 0;
 	ret->should_go_to_bottom = 0;
 	ret->velocity = 0.0f;
+	ret->vel_clock = timer_init();
 
 	scroll_bar_update_vars(ret, x, y, height, max_value);
 	return ret;
@@ -76,7 +77,7 @@ void scroll_bar_tick(scroll_bar *ptr)
 	}
 	else ptr->handle_clicked = 0;
 
-	if(timer_name_bool("sbv", 3)) ptr->velocity *= 0.991f;
+	if(timer_bool(ptr->vel_clock, 3)) ptr->velocity *= 0.991f;
 	float bef_cur_value = ptr->cur_value;
 	ptr->cur_value += ptr->velocity;
 	ptr->cur_value = clamp(ptr->cur_value, 0, ptr->vlim);
@@ -114,5 +115,6 @@ void scroll_bar_set_me_as_cur(scroll_bar *ptr)
 
 void scroll_bar_free(scroll_bar *ptr)
 {
+	timer_free(ptr->vel_clock);
 	free(ptr);
 }

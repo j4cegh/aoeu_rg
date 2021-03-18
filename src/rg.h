@@ -107,6 +107,7 @@ typedef struct vars
     float mouse_y_bot;
     char hide_game_cursor;
     timer *cursor_expand_timer;
+	timer *cursor_trail_timer;
     struct list *cursor_trail_points;
     char disable_mouse_buttons;
     cursor_state cursor_state;

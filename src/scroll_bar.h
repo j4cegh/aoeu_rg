@@ -22,6 +22,7 @@ typedef struct scroll_bar
 	v2f hr_pos;
 	v2f b_pos;
 	v2f b_size;
+	timer *vel_clock;
 } scroll_bar;
 
 #define SCROLL_BAR_ARGS float x, float y, float height, float max_value

@@ -748,8 +748,6 @@ int main(int argc, char *argv[])
 {
 	rg.time_open = timer_init();
 
-	timer_mgr_init();
-
 	current_input_box = NULL;
 	current_scroll_bar = NULL;
 	current_context_menu = NULL;
@@ -811,6 +809,7 @@ int main(int argc, char *argv[])
 	left_click_held = timer_init();
 	middle_click_held = timer_init();
 	right_click_held = timer_init();
+	mouse_moved_clock = timer_init();
 	mouse_button_released = 0;
 	cursor_type = SDL_SYSTEM_CURSOR_ARROW;
 
@@ -905,6 +904,7 @@ int main(int argc, char *argv[])
 	rg.to_mode = rg.mode;
 	rg.fade_clock = timer_init();
 	rg.cursor_expand_timer = timer_init();
+	rg.cursor_trail_timer = timer_init();
 	timer_set_milliseconds(rg.cursor_expand_timer, CURSOR_EXPAND_MS);
 	rg.fade_alpha = 255;
 	rg.enable_slider_debug = 0;
@@ -1827,7 +1827,7 @@ int main(int argc, char *argv[])
 		}
 		if(rg.mode == game_mode_ouendan)
 		{
- 			if(rg.cursor_trail_points->count > 500 || (timer_name_bool("rgctrc", 5) && rg.cursor_trail_points->count > 0))
+ 			if(rg.cursor_trail_points->count > 500 || (timer_bool(rg.cursor_expand_timer, 5) && rg.cursor_trail_points->count > 0))
 			{
 				free(rg.cursor_trail_points->start->val);
 				list_pop_front(rg.cursor_trail_points);
@@ -1953,7 +1953,7 @@ int main(int argc, char *argv[])
 
 		if(timer_milliseconds(mouse_release_velocity_timer) >= MOUSE_VEL_CHECK_MS) timer_restart(mouse_release_velocity_timer);
 
-		if(mouse_moved && timer_name_bool("mouse_moved_clock", MOUSE_MOVED_DECAY_MS)) mouse_moved = 0;
+		if(mouse_moved && timer_bool(mouse_moved_clock, MOUSE_MOVED_DECAY_MS)) mouse_moved = 0;
 
 		if(cursor_type == SDL_SYSTEM_CURSOR_ARROW) SDL_SetCursor(arrow_cursor);
 		if(cursor_type == SDL_SYSTEM_CURSOR_SIZEWE) SDL_SetCursor(horiz_cursor);
@@ -2041,6 +2041,7 @@ int main(int argc, char *argv[])
 	list_free(rg.cursor_trail_points, free);
     skin_free(rg.skin);
 
+	timer_free(rg.cursor_trail_timer);
 	timer_free(rg.cursor_expand_timer);
 	timer_free(rg.fade_clock);
 
@@ -2070,6 +2071,7 @@ int main(int argc, char *argv[])
 
 	config_deinit();
 
+	timer_free(mouse_moved_clock);
 	timer_free(right_click_held);
 	timer_free(middle_click_held);
 	timer_free(left_click_held);
@@ -2080,6 +2082,4 @@ int main(int argc, char *argv[])
 	timer_free(fps_clock);
 
 	timer_free(rg.time_open);
-
-	timer_mgr_free();
 }

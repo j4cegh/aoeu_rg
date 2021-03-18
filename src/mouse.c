@@ -35,5 +35,6 @@ char right_click_released;
 timer *left_click_held;
 timer *middle_click_held;
 timer *right_click_held;
+timer *mouse_moved_clock;
 char mouse_button_released;
 SDL_SystemCursor cursor_type;
