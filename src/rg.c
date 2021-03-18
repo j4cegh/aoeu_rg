@@ -1431,21 +1431,18 @@ int main(int argc, char *argv[])
 				online_player *me = rg.client->me;
 				char role_col = me->is_admin ? 'u' : me->is_mod ? 'z' : 'c';
 				char rank_col = me->rank == 1 ? 'z' : me->rank > 10 ? 'w' : 'u';
-				char *stats_str = dupfmt
-					(
-						"name: ~%c%s~w\n"
-						"score: %lu\n"
-						"play count: %lu\n"
-						"rank: ~%c#%lu~w\n",
-						role_col,
-						me->name,
-						me->score,
-						me->play_count,
-						rank_col,
-						me->rank
-					);
-				text3_draw(stats_str, vert_padding, online_btn->pos.y + online_btn->size.y + vert_padding, rg.win_width, 255/2, origin_left, origin_top, text3_justification_right);
-				free(stats_str);
+				text3_fmt(vert_padding, online_btn->pos.y + online_btn->size.y + vert_padding, rg.win_width, 255/2, origin_left, origin_top, text3_justification_right,
+					"name: ~%c%s~w\n"
+					"score: %lu\n"
+					"play count: %lu\n"
+					"rank: ~%c#%lu~w\n",
+					role_col,
+					me->name,
+					me->score,
+					me->play_count,
+					rank_col,
+					me->rank
+				);
 			}
 
 			float_rect ltr;
