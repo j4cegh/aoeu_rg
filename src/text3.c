@@ -23,8 +23,6 @@ float line_widths[TEXT3_MAX_LINES];
 
 float_rect text3_draw(char *str, float x, float y, float width_lim, float opacity, origin ox, origin oy, text3_justification just)
 {
-    glEnable(GL_TEXTURE_2D);
-
     size_t i;
     size_t sl = strlen(str);
 	float msy = 0.0f;
@@ -76,42 +74,49 @@ float_rect text3_draw(char *str, float x, float y, float width_lim, float opacit
 		case origin_center: { ory = y - (aty / 2); break; }
 	}
 #define ORXP(orxp_var) (line_count > 1 ? (just == text3_justification_center ? ((atx / 2) - (line_widths[orxp_var] / 2)) : (just == text3_justification_right ? (atx - line_widths[orxp_var]) : 0.0f)) : 0.0f)
-    float rx = orx + ORXP(0), ry = ory;
+    
+	float rx = orx + ORXP(0), ry = ory;
 	float_rect trect = FLOATRECT(orx, ory, atx, aty);
-#ifndef RELEASE
-	if(rg.kp[SDL_SCANCODE_LCTRL]) GL_RECT2BOX(trect, color4_mod_alpha(col_black, 50));
-#endif
-	
-	float maxhei = 0.0f;
-	line_index = 0;
-    for(i = 0; i < sl; ++i)
-    {
-        uint16_t cc = str[i];
-		if(cc == TEXT3_SPECIAL_CHAR && i + 1 < sl)
-		{
-			uint16_t ccn = str[i + 1];
-			ccol = se_text3_get_color_from_char(ccn);
-			++i;
-		}
-        glyph *g = glyphs_get(cc);
-        if(g != NULL)
-        {
-            v2f size = V2F(g->surf->w, g->surf->h);
-            glyph_render_noglsc(g, rx, ry, color4_mod_alpha(ccol, opacity));
-            rx += size.x;
-            if(size.y > maxhei) maxhei = size.y;
-            if(rx - orx >= (width_lim * 0.9f) || cc == '\n')
-            {
-				++line_index;
-				float orxpv = ORXP(line_index);
-                rx = orx + orxpv;
-                ry += maxhei;
-            }
-        }
-    }
 
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
+	if(opacity > 0)
+	{
+#ifndef RELEASE
+		if(rg.kp[SDL_SCANCODE_LCTRL]) GL_RECT2BOX(trect, color4_mod_alpha(col_black, 50));
+#endif
+		float maxhei = 0.0f;
+		line_index = 0;
+
+		glEnable(GL_TEXTURE_2D);
+
+		for(i = 0; i < sl; ++i)
+		{
+			uint16_t cc = str[i];
+			if(cc == TEXT3_SPECIAL_CHAR && i + 1 < sl)
+			{
+				uint16_t ccn = str[i + 1];
+				ccol = se_text3_get_color_from_char(ccn);
+				++i;
+			}
+			glyph *g = glyphs_get(cc);
+			if(g != NULL)
+			{
+				v2f size = V2F(g->surf->w, g->surf->h);
+				glyph_render_noglsc(g, rx, ry, color4_mod_alpha(ccol, opacity));
+				rx += size.x;
+				if(size.y > maxhei) maxhei = size.y;
+				if(rx - orx >= (width_lim * 0.9f) || cc == '\n')
+				{
+					++line_index;
+					float orxpv = ORXP(line_index);
+					rx = orx + orxpv;
+					ry += maxhei;
+				}
+			}
+		}
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+	}
 #undef ORXP
 
     return trect;
