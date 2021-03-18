@@ -51,12 +51,6 @@ typedef struct song
 	object_type editor_placement_type;
     
     char *name;
-
-    char *difficulty_name;
-    char *artist;
-    char *genre;
-    char *creator;
-
     char *bg_filename;
     char *folder_loc;
     char *data_file_loc;
@@ -221,7 +215,6 @@ void song_add_mania_note(song *ptr, int lane, TIME_VAR time_ms);
 
 char song_reload_bg(song *ptr);
 char song_load_music(song *ptr);
-/*song *song_convert_from_osu_beatmap(char *osu_file_loc);*/
 char *song_serialize(song *ptr);
 void song_overwrite(song *ptr, char *serialized_data, char is_undo_redo);
 char song_load(song *ptr);
@@ -230,3 +223,5 @@ void song_new(song *ptr, char *music_file_name);
 void song_save(song *ptr);
 void song_save_score(song *ptr);
 char *song_get_scores_dir(song *ptr);
+
+/*song *song_convert_from_osu_beatmap(char *osu_file_loc);*/

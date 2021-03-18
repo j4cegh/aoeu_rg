@@ -1,5 +1,4 @@
 #include "song.h"
-
 #include "rg.h"
 #include "utils.h"
 #include "text3.h"
@@ -15,14 +14,10 @@
 #include "ezgui.h"
 #include "online_client.h"
 #include "logger.h"
-#ifndef __USE_MISC
-#define __USE_MISC
-#endif
-#include <dirent.h>
 
 song *song_init(char *name, char *folder_loc, char *data_file_loc)
 {
-    song *ret = (song*) malloc(sizeof *ret);
+    song *ret = malloc(sizeof *ret);
 
 	ret->version = SONG_FILE_VERSION;
 	ret->game_mode_in_editor = rg.mode;
@@ -416,11 +411,7 @@ void song_delete_selected_objects(song *ptr)
 
 void song_unselect_object(song *ptr)
 {
-	if(ptr->selected_object != NULL)
-	{
-		/*if(ptr->selected_object->slider && ptr->selected_object->slider->tex == 0) ptr->selected_object->delete_me = 1;*/
-		ptr->selected_object->is_new = 0;
-	}
+	if(ptr->selected_object != NULL) ptr->selected_object->is_new = 0;
 	ptr->selected_object = NULL;
 }
 
@@ -926,12 +917,14 @@ void song_tick_bot(song *ptr)
 					rg.ouendan_click_1++;
 				else if(!on_long) rg.ouendan_click_1 = 0;
 
-				/* int time = (int)(ptr->current_time_ms / 6);
+				/*
+				int time = (int) (ptr->current_time_ms / 6);
 				double val = time * ((2.0f * PI_NUM) / 360);
 				int radius = (CIRCLE_RADIUS * ptr->object_size_pf);
 				int area = radius / 2;
 				rg.mop_x = rg.mouse_x_bot + (area * cos(val));
-				rg.mop_y = rg.mouse_y_bot + (area * sin(val)); */
+				rg.mop_y = rg.mouse_y_bot + (area * sin(val));
+				*/
 
 				rg.mop_x = rg.mouse_x_bot;
 				rg.mop_y = rg.mouse_y_bot;
@@ -1411,7 +1404,6 @@ void song_tick_play_ui(song *ptr)
 
 void song_tick(song *ptr)
 {
-
 	if(rg.screen == screen_editor && ptr->music_state == song_playing && ptr->current_time_ms >= ptr->timing_section_start_ms)
 	{
 		int cur_stanza = (ptr->current_time_ms - ptr->timing_section_start_ms) / ptr->beat_length_ms;
@@ -1548,7 +1540,7 @@ char song_calc_rank(song *ptr)
 
 void song_inc_combo(song *ptr)
 {
-	health_bar_add(&(ptr->hbar), 10);
+	health_bar_add(&ptr->hbar, 10);
 	++ptr->current_combo;
 	if(ptr->current_combo > ptr->highest_combo) ptr->highest_combo = ptr->current_combo;
 }
@@ -2017,259 +2009,6 @@ char song_load_music(song *ptr)
 	return ret;
 }
 
-/*
-song *song_convert_from_osu_beatmap(char *osu_file_loc)
-{
-	if(!file_exists(osu_file_loc)) return NULL;
-
-	list *lines = list_init();
-	FILE *fp = fopen(osu_file_loc, "r");
-
-	if(!fp)
-	{
-		list_free(lines, list_dummy);
-		return NULL;
-	}
-
-	fseek(fp, 0L, SEEK_END);
-	long sz = ftell(fp);
-	rewind(fp);
-
-	char *buf = malloc(sz);
-	size_t buflen = strlen(buf);
-	while(fgets(buf, sizeof(buf), fp) != NULL)
-	{
-		buf[clampi(buflen - 2, 0, buflen - 1)] = '\0';
-		list_push_back(lines, dupe_str(&buf[0]));
-	}
-
-	free(buf);
-
-	fclose(fp);
-
-	song *ret = song_init(SONG_UNKNOWN_NAME, "", "");
-
-	song_clear_timing_sections(ret);
-
-	char found_approach_rate = 0;
-	float cs = 0.0f;
-	float od = 0.0f;
-	float ar = 0.0f;
-	float uninherited_beat_length_ms = 500.0f;
-	float slider_multiplier = 1.0f;
-
-	char found_general = 0;
-	char found_metadata = 0;
-	char found_difficulty = 0;
-	char found_timing_points = 0;
-	char found_hit_objects = 0;
-	int i;
-	for(i = 0; i < lines->count; i++)
-	 {
-		char *line = list_get_val_at(lines, i);
-		size_t line_len = strlen(line);
-		if(line_len == 0)
-		{
-			found_general = 0;
-			found_metadata = 0;
-			found_difficulty = 0;
-			found_timing_points = 0;
-			found_hit_objects = 0;
-		}
-		else if(found_general)
-		{
-			list *split = split_str(line, ":");
-			if(split->count == 2)
-			{
-				char *first = list_get_val_at(split, 0);
-				char *last = list_get_val_at(split, 1);
-				int si = 0;
-				while(last[si++] == ' ') last++;
-				if(strs_are_equal(first, "AudioFilename"))
-				{
-					if(ret->music_filename) free(ret->music_filename);
-					ret->music_filename = dupe_str(last);
-				}
-			}
-			list_free(split, free);
-		}
-		else if(found_metadata)
-		{
-			list *split = split_str(line, ":");
-			if(split->count == 2)
-			{
-				char *first = list_get_val_at(split, 0);
-				char *last = list_get_val_at(split, 1);
-				int si = 0;
-				while(last[si++] == ' ') last++;
-				if(strs_are_equal(first, "Title"))
-				{
-					if(ret->name) free(ret->name);
-					ret->name = dupe_str(last);
-				}
-			}
-			list_free(split, free);
-		}
-		else if(found_difficulty)
-		{
-			list *split = split_str(line, ":");
-			if(split->count == 2)
-			{
-				char *first = list_get_val_at(split, 0);
-				char *last = list_get_val_at(split, 1);
-				if(strs_are_equal(first, "CircleSize"))
-				{
-					cs = atof(last);
-					ret->raw_object_size = cs;
-				}
-				else if(strs_are_equal(first, "ApproachRate"))
-				{
-					ar = atof(last);
-					ret->raw_approach_rate = ar;
-					found_approach_rate = 1;
-				}
-				else if(strs_are_equal(first, "OverallDifficulty"))
-				{
-					od = atof(last);
-				}
-				else if(strs_are_equal(first, "SliderMultiplier"))
-				{
-					slider_multiplier = atof(last);
-				}
-			}
-			list_free(split, free);
-		}
-		else if(found_timing_points)
-		{
-			list *split = split_str(line, ",");
-			if(split->count >= 2)
-			{
-				TIME_VAR start_ms = atof(list_get_val_at(split, 0));
-				TIME_VAR beat_length_ms = atof(list_get_val_at(split, 1));
-				TIME_VAR beat_divisor = 4;
-				float slider_time_pixel_ratio = 1.0;
-				char this_tp_uninherited = 1;
-				if(split->count == 2)
-				{
-					beat_divisor = 4;
-					slider_time_pixel_ratio = ((beat_length_ms / (slider_multiplier * 100)) / slider_multiplier);
-				}
-				else
-				{
-					if(split->count >= 3)
-					{
-						beat_divisor = atof(list_get_val_at(split, 2));
-					}
-					if(split->count >= 7)
-					{
-						this_tp_uninherited = atoi(list_get_val_at(split, 6));
-					}
-				}
-				if(!this_tp_uninherited)
-				{
-					slider_time_pixel_ratio = scale_value_to(beat_length_ms, -100, 0, 1, 4) * slider_multiplier;
-					beat_length_ms = uninherited_beat_length_ms;
-				}
-				else uninherited_beat_length_ms = beat_length_ms;
-				list_push_back(ret->timing_sections, timing_section_init(ret, beat_length_ms, start_ms, slider_time_pixel_ratio, beat_divisor));
-			}
-			list_free(split, free);
-		}
-		else if(found_hit_objects)
-		{
-			list *split = split_str(line, ",");
-			if(split->count >= 6)
-			{
-				float x = scale_value_to(atof(list_get_val_at(split, 0)), 0, 512, 0, 640);
-				float y = scale_value_to(atof(list_get_val_at(split, 1)), 0, 384, 0, 480);
-				TIME_VAR time_ms = atof(list_get_val_at(split, 2));
-				int8_t type = atoi(list_get_val_at(split, 3));
-				char is_circle = (type >> 0) & 1;
-				char is_slider = (type >> 1) & 1;
-				char new_combo = (type >> 2) & 1;
-				char is_spinner = (type >> 3) & 1;
-				object_type conv_type = is_circle ? object_circle : is_slider ? object_slider : is_spinner ? object_spinner : -1;
-				if(conv_type != -1 && !is_spinner)
-				{
-					object *obj = object_init(x, y, conv_type, time_ms, 0, ret);
-					obj->new_combo = new_combo;
-
-					if(is_slider && split->count >= 7)
-					{
-						slider *slider = obj->slider;
-						slider_curve_type curve_type = slider_curve_catmull;
-						list *control_point_strs = split_str(list_get_val_at(split, 5), "|");
-						if(control_point_strs->count >= 3)
-						{
-							char *ctstr = list_get_val_at(control_point_strs, 0);
-							char tc = ctstr[0];
-
-							if(tc == 'B') curve_type = slider_curve_bezier;
-							else if(tc == 'C') curve_type = slider_curve_catmull;
-							else if(tc == 'L') curve_type = slider_curve_linear;
-							else if(tc == 'P') curve_type = slider_curve_circle;
-							slider->curve_type = curve_type;
-							list_node *st = control_point_strs->start->next;
-							for(; st != NULL; st = st->next)
-							{
-								char *cp_str = st->val;
-								list *cp_sp = split_str(cp_str, ":");
-								if(cp_sp->count == 2)
-								{
-									float cpx = scale_value_to(atof(list_get_val_at(cp_sp, 0)), 0, 512, 0, 640);
-									float cpy = scale_value_to(atof(list_get_val_at(cp_sp, 1)), 0, 384, 0, 480);
-									list_push_back(slider->control_points, slider_control_point_init(cpx, cpy));
-								}
-								if(slider->control_points->count == 3 && (tc == 'B' || tc == 'C'))
-								{
-									slider_control_point *last = (slider_control_point*) slider->control_points->end->val;
-									list_push_back(slider->control_points, slider_control_point_init(last->pos.x, last->pos.y));
-								}
-								list_free(cp_sp, free);
-							}
-						}
-						list_free(control_point_strs, free);
-						slider->reverses = atoi(list_get_val_at(split, 6)) - 1;
-					}
-					
-					list_push_back(ret->all_objects, obj);
-				}
-			}
-			
-			list_free(split, free);
-		}
-		else if(line_len > 0)
-		{
-			if(strs_are_equal(line, "[General]"))
-			{
-				found_general = 1;
-			}
-			else if(strs_are_equal(line, "[Metadata]"))
-			{
-				found_metadata = 1;
-			}
-			else if(strs_are_equal(line, "[Difficulty]"))
-			{
-				found_difficulty = 1;
-			}
-			else if(strs_are_equal(line, "[TimingPoints]"))
-			{
-				found_timing_points = 1;
-			}
-			else if(strs_are_equal(line, "[HitObjects]"))
-			{
-				found_hit_objects = 1;
-			}
-		}
-	}
-	if(!found_approach_rate) ret->raw_approach_rate = od;
-
-	list_free(lines, free);
-
-	return ret;
-}
-*/
-
 char *song_serialize(song *ptr)
 {
 	char *ret = dupfmt
@@ -2527,15 +2266,7 @@ void song_save_score(song *ptr)
 		rg.mode
 	);
 
-	if(rg.client->authed
-#ifdef RELEASE
-	&& ptr->replay->score > 0
-	&& !rg.bot_enabled
-#endif
-	)
-	{
-		online_client_submit_replay(rg.client, ptr->replay, ser);
-	}
+	if(rg.client->authed && ptr->replay->score > 0 && !rg.bot_enabled) online_client_submit_replay(rg.client, ptr->replay, ser);
 
 	char *to_file = dupfmt
 	(
@@ -2565,3 +2296,256 @@ char *song_get_scores_dir(song *ptr)
 	make_dir(ret);
 	return ret;
 }
+
+/*
+song *song_convert_from_osu_beatmap(char *osu_file_loc)
+{
+	if(!file_exists(osu_file_loc)) return NULL;
+
+	list *lines = list_init();
+	FILE *fp = fopen(osu_file_loc, "r");
+
+	if(!fp)
+	{
+		list_free(lines, list_dummy);
+		return NULL;
+	}
+
+	fseek(fp, 0L, SEEK_END);
+	long sz = ftell(fp);
+	rewind(fp);
+
+	char *buf = malloc(sz);
+	size_t buflen = strlen(buf);
+	while(fgets(buf, sizeof(buf), fp) != NULL)
+	{
+		buf[clampi(buflen - 2, 0, buflen - 1)] = '\0';
+		list_push_back(lines, dupe_str(&buf[0]));
+	}
+
+	free(buf);
+
+	fclose(fp);
+
+	song *ret = song_init(SONG_UNKNOWN_NAME, "", "");
+
+	song_clear_timing_sections(ret);
+
+	char found_approach_rate = 0;
+	float cs = 0.0f;
+	float od = 0.0f;
+	float ar = 0.0f;
+	float uninherited_beat_length_ms = 500.0f;
+	float slider_multiplier = 1.0f;
+
+	char found_general = 0;
+	char found_metadata = 0;
+	char found_difficulty = 0;
+	char found_timing_points = 0;
+	char found_hit_objects = 0;
+	int i;
+	for(i = 0; i < lines->count; i++)
+	 {
+		char *line = list_get_val_at(lines, i);
+		size_t line_len = strlen(line);
+		if(line_len == 0)
+		{
+			found_general = 0;
+			found_metadata = 0;
+			found_difficulty = 0;
+			found_timing_points = 0;
+			found_hit_objects = 0;
+		}
+		else if(found_general)
+		{
+			list *split = split_str(line, ":");
+			if(split->count == 2)
+			{
+				char *first = list_get_val_at(split, 0);
+				char *last = list_get_val_at(split, 1);
+				int si = 0;
+				while(last[si++] == ' ') last++;
+				if(strs_are_equal(first, "AudioFilename"))
+				{
+					if(ret->music_filename) free(ret->music_filename);
+					ret->music_filename = dupe_str(last);
+				}
+			}
+			list_free(split, free);
+		}
+		else if(found_metadata)
+		{
+			list *split = split_str(line, ":");
+			if(split->count == 2)
+			{
+				char *first = list_get_val_at(split, 0);
+				char *last = list_get_val_at(split, 1);
+				int si = 0;
+				while(last[si++] == ' ') last++;
+				if(strs_are_equal(first, "Title"))
+				{
+					if(ret->name) free(ret->name);
+					ret->name = dupe_str(last);
+				}
+			}
+			list_free(split, free);
+		}
+		else if(found_difficulty)
+		{
+			list *split = split_str(line, ":");
+			if(split->count == 2)
+			{
+				char *first = list_get_val_at(split, 0);
+				char *last = list_get_val_at(split, 1);
+				if(strs_are_equal(first, "CircleSize"))
+				{
+					cs = atof(last);
+					ret->raw_object_size = cs;
+				}
+				else if(strs_are_equal(first, "ApproachRate"))
+				{
+					ar = atof(last);
+					ret->raw_approach_rate = ar;
+					found_approach_rate = 1;
+				}
+				else if(strs_are_equal(first, "OverallDifficulty"))
+				{
+					od = atof(last);
+				}
+				else if(strs_are_equal(first, "SliderMultiplier"))
+				{
+					slider_multiplier = atof(last);
+				}
+			}
+			list_free(split, free);
+		}
+		else if(found_timing_points)
+		{
+			list *split = split_str(line, ",");
+			if(split->count >= 2)
+			{
+				TIME_VAR start_ms = atof(list_get_val_at(split, 0));
+				TIME_VAR beat_length_ms = atof(list_get_val_at(split, 1));
+				TIME_VAR beat_divisor = 4;
+				float slider_time_pixel_ratio = 1.0;
+				char this_tp_uninherited = 1;
+				if(split->count == 2)
+				{
+					beat_divisor = 4;
+					slider_time_pixel_ratio = ((beat_length_ms / (slider_multiplier * 100)) / slider_multiplier);
+				}
+				else
+				{
+					if(split->count >= 3)
+					{
+						beat_divisor = atof(list_get_val_at(split, 2));
+					}
+					if(split->count >= 7)
+					{
+						this_tp_uninherited = atoi(list_get_val_at(split, 6));
+					}
+				}
+				if(!this_tp_uninherited)
+				{
+					slider_time_pixel_ratio = scale_value_to(beat_length_ms, -100, 0, 1, 4) * slider_multiplier;
+					beat_length_ms = uninherited_beat_length_ms;
+				}
+				else uninherited_beat_length_ms = beat_length_ms;
+				list_push_back(ret->timing_sections, timing_section_init(ret, beat_length_ms, start_ms, slider_time_pixel_ratio, beat_divisor));
+			}
+			list_free(split, free);
+		}
+		else if(found_hit_objects)
+		{
+			list *split = split_str(line, ",");
+			if(split->count >= 6)
+			{
+				float x = scale_value_to(atof(list_get_val_at(split, 0)), 0, 512, 0, 640);
+				float y = scale_value_to(atof(list_get_val_at(split, 1)), 0, 384, 0, 480);
+				TIME_VAR time_ms = atof(list_get_val_at(split, 2));
+				int8_t type = atoi(list_get_val_at(split, 3));
+				char is_circle = (type >> 0) & 1;
+				char is_slider = (type >> 1) & 1;
+				char new_combo = (type >> 2) & 1;
+				char is_spinner = (type >> 3) & 1;
+				object_type conv_type = is_circle ? object_circle : is_slider ? object_slider : is_spinner ? object_spinner : -1;
+				if(conv_type != -1 && !is_spinner)
+				{
+					object *obj = object_init(x, y, conv_type, time_ms, 0, ret);
+					obj->new_combo = new_combo;
+
+					if(is_slider && split->count >= 7)
+					{
+						slider *slider = obj->slider;
+						slider_curve_type curve_type = slider_curve_catmull;
+						list *control_point_strs = split_str(list_get_val_at(split, 5), "|");
+						if(control_point_strs->count >= 3)
+						{
+							char *ctstr = list_get_val_at(control_point_strs, 0);
+							char tc = ctstr[0];
+
+							if(tc == 'B') curve_type = slider_curve_bezier;
+							else if(tc == 'C') curve_type = slider_curve_catmull;
+							else if(tc == 'L') curve_type = slider_curve_linear;
+							else if(tc == 'P') curve_type = slider_curve_circle;
+							slider->curve_type = curve_type;
+							list_node *st = control_point_strs->start->next;
+							for(; st != NULL; st = st->next)
+							{
+								char *cp_str = st->val;
+								list *cp_sp = split_str(cp_str, ":");
+								if(cp_sp->count == 2)
+								{
+									float cpx = scale_value_to(atof(list_get_val_at(cp_sp, 0)), 0, 512, 0, 640);
+									float cpy = scale_value_to(atof(list_get_val_at(cp_sp, 1)), 0, 384, 0, 480);
+									list_push_back(slider->control_points, slider_control_point_init(cpx, cpy));
+								}
+								if(slider->control_points->count == 3 && (tc == 'B' || tc == 'C'))
+								{
+									slider_control_point *last = (slider_control_point*) slider->control_points->end->val;
+									list_push_back(slider->control_points, slider_control_point_init(last->pos.x, last->pos.y));
+								}
+								list_free(cp_sp, free);
+							}
+						}
+						list_free(control_point_strs, free);
+						slider->reverses = atoi(list_get_val_at(split, 6)) - 1;
+					}
+					
+					list_push_back(ret->all_objects, obj);
+				}
+			}
+			
+			list_free(split, free);
+		}
+		else if(line_len > 0)
+		{
+			if(strs_are_equal(line, "[General]"))
+			{
+				found_general = 1;
+			}
+			else if(strs_are_equal(line, "[Metadata]"))
+			{
+				found_metadata = 1;
+			}
+			else if(strs_are_equal(line, "[Difficulty]"))
+			{
+				found_difficulty = 1;
+			}
+			else if(strs_are_equal(line, "[TimingPoints]"))
+			{
+				found_timing_points = 1;
+			}
+			else if(strs_are_equal(line, "[HitObjects]"))
+			{
+				found_hit_objects = 1;
+			}
+		}
+	}
+	if(!found_approach_rate) ret->raw_approach_rate = od;
+
+	list_free(lines, free);
+
+	return ret;
+}
+*/
