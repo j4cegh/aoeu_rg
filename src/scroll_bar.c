@@ -7,7 +7,7 @@ scroll_bar *current_scroll_bar;
 
 scroll_bar *scroll_bar_init(SCROLL_BAR_ARGS)
 {
-	scroll_bar *ret = (scroll_bar*) malloc(sizeof *ret);
+	scroll_bar *ret = malloc(sizeof *ret);
 	ret->handle_clicked = 0;
 	ret->cur_value = 0;
 	ret->work_if_console_is_open = 0;

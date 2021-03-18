@@ -86,7 +86,7 @@ void list_test_sort()
 
 list *list_init()
 {
-	list *ret = (list*) malloc(sizeof *ret);
+	list *ret = malloc(sizeof *ret);
 	ret->start = NULL;
 	ret->end = NULL;
 	ret->count = 0;
@@ -117,7 +117,7 @@ void list_insert(list *ptr, list_node *n, void *v, char before)
 		list_push_front(ptr, v);
 		return;
 	}
-	list_node *nn = (list_node*) malloc(sizeof *nn);
+	list_node *nn = malloc(sizeof *nn);
 	nn->source = ptr;
 	nn->val = v;
 	if(n)
@@ -160,7 +160,7 @@ void list_push_front(list *ptr, void *v)
 		list_insert(ptr, ptr->end, v, 0);
 		return;
 	}
-	list_node *nn = (list_node*) malloc(sizeof *nn);
+	list_node *nn = malloc(sizeof *nn);
 	nn->source = ptr;
 	nn->val = v;
 	nn->before = NULL;

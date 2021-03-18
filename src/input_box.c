@@ -9,7 +9,7 @@ input_box *current_input_box;
 
 input_box *input_box_init(float x, float y, int box_width_pixels, char *initial_text, char *empty_text)
 {
-	input_box *ret = (input_box*) malloc(sizeof *ret);
+	input_box *ret = malloc(sizeof *ret);
 
 	ret->pos = V2F(x, y);
 	ret->size = V2F(box_width_pixels, 0);

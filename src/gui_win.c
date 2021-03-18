@@ -23,7 +23,7 @@ gui_win *gui_win_init(char *win_name,
 	void(*deinit_func)(struct gui_win *ptr)
 )
 {
-	gui_win *ret = (gui_win*) malloc(sizeof *ret);
+	gui_win *ret = malloc(sizeof *ret);
 
 	ret->win_name = dupe_str(win_name);
 	ret->scene_name = dupe_str(scene_name);

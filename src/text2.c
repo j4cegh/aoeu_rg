@@ -4,7 +4,7 @@
 
 text2 *text2_init(char *str, float x, float y, color4 color)
 {
-	text2 *ret = (text2*) malloc(sizeof *ret);
+	text2 *ret = malloc(sizeof *ret);
 	ret->str = dupe_str(str);
 	ret->pos.x = x;
 	ret->pos.y = y;

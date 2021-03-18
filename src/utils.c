@@ -84,7 +84,7 @@ int rand_num_ranged(int start, int end)
 /* strings start */
 char *concat_str(char *str1, char *str2)
 {
-    char *result = (char*) malloc(1 + strlen(str1) + strlen(str2));
+    char *result = malloc(1 + strlen(str1) + strlen(str2));
     strcpy(result, str1);
     strcat(result, str2);
     return result;
@@ -109,7 +109,7 @@ list *tokenize_str(char *str, char *by)
 	size_t bylen = strlen(by);
 	if(len < 1 || bylen < 1 || (bylen > len)) return NULL;
 	list *ret = list_init();
-	char *tmp = (char*) (malloc((len + 1) * sizeof(char)));
+	char *tmp = (malloc((len + 1) * sizeof(char)));
 	size_t i, tt = 0;
 	for(i = 0; i <= len; ++i)
 	{
@@ -145,7 +145,7 @@ list *split_str(char *str, char *by)
 	if(len < 1) return NULL;
 	list *ret = list_init();
 	char rby = by[0];
-	char *tmp = (char*) malloc((len + 1) * sizeof(char));
+	char *tmp = malloc((len + 1) * sizeof(char));
 	int chi;
 	int tmpi = 0;
 	for(chi = 0; chi <= len; ++chi)
@@ -387,7 +387,7 @@ char *dupfmt(char *fmt, ...)
 void str_insert_char(char **dest_str, int index, char c)
 {
 	char *str = *dest_str;
-	char *new1 = (char*) malloc(strlen(str) + 2);
+	char *new1 = malloc(strlen(str) + 2);
 	char *aft = dupe_str(&str[index]);
 	strcpy(new1, str);
 	new1[index] = c;
@@ -505,14 +505,14 @@ char *get_file_from_path(char *path)
 /* num allocs start */
 int *new_int(int i)
 {
-	int *ret = (int*) malloc(sizeof *ret);
+	int *ret = malloc(sizeof *ret);
 	*ret = i;
 	return ret;
 }
 
 float *new_float(float f)
 {
-	float *ret = (float*) malloc(sizeof *ret);
+	float *ret = malloc(sizeof *ret);
 	*ret = f;
 	return ret;
 }
@@ -659,9 +659,9 @@ unsigned char *enc_msg(char *msg, unsigned char rec_pk[PUB_KEY_LEN], unsigned ch
 	/*unsigned char cipher_text[padded_msg_len];*/
 	unsigned char *cipher_text = malloc(padded_msg_len);
 	int cbr = crypto_box(cipher_text, padded_msg, padded_msg_len, nonce, rec_pk, your_sk);
-	if(cbr != 0) return (unsigned char*) dupe_str("");
+	if(cbr != 0) return dupe_str("");
 	int rs = NONCE_LEN + padded_msg_len;
-	unsigned char *ret = (unsigned char*) malloc(rs);
+	unsigned char *ret = malloc(rs);
 	memcpy(ret, nonce, NONCE_LEN);
 	memcpy(ret + NONCE_LEN, cipher_text, padded_msg_len);
 	(*retsize) = rs;
@@ -681,7 +681,7 @@ char *dec_msg(unsigned char *encrypted, int encrypted_size, unsigned char sender
 	int cbor = crypto_box_open(decrypted, cipher_text, decs, nonce, sender_pk, your_sk);
 	if(cbor != 0) return dupe_str("");
 	int rl = (decs - PADDING_LEN);
-	char *ret = (char*) malloc(rl + 1);
+	char *ret = malloc(rl + 1);
 	ret[rl] = '\0';
 	memcpy(ret, decrypted + PADDING_LEN, rl);
 	free(decrypted);

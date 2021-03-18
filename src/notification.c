@@ -5,7 +5,7 @@ list *notifications_list;
 
 void show_notif_col(char *msg, color4 col)
 {
-	notification *noti = (notification*) malloc(sizeof *noti);
+	notification *noti = malloc(sizeof *noti);
 	noti->msg = dupe_str(msg);
 	noti->col = col;
 	noti->timer = timer_init();

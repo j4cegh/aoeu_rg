@@ -18,38 +18,3 @@ extern int ONLINE_SERVER_PORT;
 #define ONLINE_SERVER_MIN_CHAT_LEN 1
 #define ONLINE_SERVER_MAX_CHAT_LEN 500
 #define ONLINE_SERVER_ALLOWED_NAME_CHARS " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
-/*
-int ci1 = 0;
-int ss1 = 0;
-int f1 = 0;
-char g1 = 1;
-while(g1)
-{
-	char cc1 = serialized_data[ci1];
-	char e1 = cc1 == '\0';
-	if(cc1 == ??? || e1)
-	{
-		if(!e1) serialized_data[ci1] = '\0';
-		char *rt1 = &serialized_data[ss1];
-
-		switch(f1)
-		{
-			case 0:
-			{
-				
-				break;
-			}
-		}
-
-		if(e1) g1 = 0;
-		else
-		{
-			serialized_data[ci1] = ???;
-			++f1;
-			ss1 = ci1 + 1;
-		}
-	}
-	++ci1;
-}
-*/

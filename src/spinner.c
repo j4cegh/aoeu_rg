@@ -7,7 +7,7 @@
 
 spinner *spinner_init(object *host_obj)
 {
-    spinner *ret = (spinner*) malloc(sizeof *ret);
+    spinner *ret = malloc(sizeof *ret);
     ret->host_obj = host_obj;
     spinner_reset(ret);
     ret->deflate = timer_init();
