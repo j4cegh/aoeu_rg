@@ -41,6 +41,7 @@ typedef struct
 	int middle_click;
 	char middle_click_released;
 
+	int right_click;
 	char right_click_released;
 } mouse_data;
 
@@ -48,5 +49,3 @@ extern mouse_data mouse;
 
 extern int left_click;
 extern char left_click_released;
-
-extern int right_click;

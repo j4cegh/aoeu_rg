@@ -544,7 +544,7 @@ void slider_update(slider *ptr)
 				slider_calculate_path(ptr, 0);
 				song_capture_undo_state(song);
 			}
-			else if(right_click == 1)
+			else if(mouse.right_click == 1)
 			{
 				if (ptr->tex == 0)
 				{
@@ -615,7 +615,7 @@ void slider_update(slider *ptr)
 						song->slider_control_point_box_hovered = 1;
 
 						if(ptr->selected_control_point == NULL && left_click == 1) ptr->selected_control_point = p;
-						else if(ptr->selected_control_point == NULL && ptr->control_points->count > 2 && right_click == 1)
+						else if(ptr->selected_control_point == NULL && ptr->control_points->count > 2 && mouse.right_click == 1)
 						{
 							slider_control_point_free(p);
 							list_erase(ptr->control_points, n);

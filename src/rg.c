@@ -804,7 +804,7 @@ int main(int argc, char *argv[])
 	left_click_released = 0;
 	mouse.middle_click = 0;
 	mouse.middle_click_released = 0;
-	right_click = 0;
+	mouse.right_click = 0;
 	mouse.right_click_released = 0;
 	mouse.left_click_held = timer_init();
 	mouse.middle_click_held = timer_init();
@@ -1212,11 +1212,11 @@ int main(int argc, char *argv[])
 					timer_restart(mouse.middle_click_held);
 				}
 
-				if(good && mouse.state_right) right_click++;
+				if(good && mouse.state_right) mouse.right_click++;
 				else
 				{
-					if(good && right_click > 0) mouse.right_click_released = 1;
-					right_click = 0;
+					if(good && mouse.right_click > 0) mouse.right_click_released = 1;
+					mouse.right_click = 0;
 					timer_restart(mouse.right_click_held);
 				}
 			}
@@ -1234,17 +1234,17 @@ int main(int argc, char *argv[])
 			mouse.middle_click_released = 0;
 			timer_restart(mouse.middle_click_held);
 
-			right_click = 0;
+			mouse.right_click = 0;
 			mouse.right_click_released = 0;
 			timer_restart(mouse.right_click_held);
 		}
 
 		if(current_context_menu && mouse.button_released && !(current_context_menu->hovered)) current_context_menu->button_click_avoided = 0;
 
-		if((left_click > 0 || mouse.middle_click > 0 || right_click > 0) && !mouse.inside_window) mouse.outside_window_during_drag = 1;
-		else if(left_click + mouse.middle_click + right_click == 0) mouse.outside_window_during_drag = 0;
+		if((left_click > 0 || mouse.middle_click > 0 || mouse.right_click > 0) && !mouse.inside_window) mouse.outside_window_during_drag = 1;
+		else if(left_click + mouse.middle_click + mouse.right_click == 0) mouse.outside_window_during_drag = 0;
 
-		if(left_click == 1 || mouse.middle_click == 1 || right_click == 1)
+		if(left_click == 1 || mouse.middle_click == 1 || mouse.right_click == 1)
 		{
 			mouse.x_on_click_real = mouse.state_x;
 			mouse.y_on_click_real = mouse.state_y;
@@ -1274,7 +1274,7 @@ int main(int argc, char *argv[])
 		mouse.x_on_click = scale_value_to(mouse.x_on_click_real, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width);
 		mouse.y_on_click = scale_value_to(mouse.y_on_click_real, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height);
 
-		if(left_click || mouse.middle_click || right_click)
+		if(left_click || mouse.middle_click || mouse.right_click)
 		{
 			mouse.drag_delta_x = mouse.x - mouse.x_on_click;
 			mouse.drag_delta_y = mouse.y - mouse.y_on_click;
@@ -1287,7 +1287,7 @@ int main(int argc, char *argv[])
 
 		mouse.dragged = (mouse.drag_delta_x != 0 || mouse.drag_delta_y != 0);
 
-		if(left_click || mouse.middle_click || right_click)
+		if(left_click || mouse.middle_click || mouse.right_click)
 		{
 			mouse.release_velocity_x -= (mouse.delta_x / 2) * 0.05;
 			mouse.release_velocity_y -= (mouse.delta_y / 2) * 0.05;
@@ -1334,7 +1334,7 @@ int main(int argc, char *argv[])
 		{
 			if(rg.kp[rg.ouendan_keycode_1] || (!rg.disable_mouse_buttons && left_click)) rg.ouendan_click_1++;
 			else rg.ouendan_click_1 = 0;
-			if(rg.kp[rg.ouendan_keycode_2] || (!rg.disable_mouse_buttons && right_click)) rg.ouendan_click_2++;
+			if(rg.kp[rg.ouendan_keycode_2] || (!rg.disable_mouse_buttons && mouse.right_click)) rg.ouendan_click_2++;
 			else rg.ouendan_click_2 = 0;
 			if(rg.kp[rg.mania_keycode_1]) rg.mania_click_1++;
 			else rg.mania_click_1 = 0;
@@ -1714,7 +1714,7 @@ int main(int argc, char *argv[])
 				}
 			}
 
-			if(left_click == 1 || right_click == 1)
+			if(left_click == 1 || mouse.right_click == 1)
 			{
 				rg.mop_xoc = rg.mop_x;
 				rg.mop_yoc = rg.mop_y;

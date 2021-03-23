@@ -1331,7 +1331,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 							obj->new_combo = !obj->new_combo;
 							recalc_nums_after = 1;
 						}
-						else if(right_click == 1 && !del && !(ptr->slider_control_point_box_hovered))
+						else if(mouse.right_click == 1 && !del && !(ptr->slider_control_point_box_hovered))
 						{
 							if(ptr->selected_objects->count > 0 && any_selected_object_hovered)
 							{
