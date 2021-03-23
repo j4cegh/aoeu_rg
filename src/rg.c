@@ -801,7 +801,7 @@ int main(int argc, char *argv[])
 	mouse.state_middle = 0;
 	mouse.state_right = 0;
 	left_click = 0;
-	left_click_released = 0;
+	mouse.left_click_released = 0;
 	mouse.middle_click = 0;
 	mouse.middle_click_released = 0;
 	mouse.right_click = 0;
@@ -1176,7 +1176,7 @@ int main(int argc, char *argv[])
 
 		if(rg.resized) SDL_GetWindowSize(rg.win, &rg.win_width_real, &rg.win_height_real);
 
-		left_click_released = 0;
+		mouse.left_click_released = 0;
 		mouse.middle_click_released = 0;
 		mouse.right_click_released = 0;
 
@@ -1199,7 +1199,7 @@ int main(int argc, char *argv[])
 				if(good && mouse.state_left) left_click++;
 				else
 				{
-					if(good && left_click > 0) left_click_released = 1;
+					if(good && left_click > 0) mouse.left_click_released = 1;
 					left_click = 0;
 					timer_restart(mouse.left_click_held);
 				}
@@ -1227,7 +1227,7 @@ int main(int argc, char *argv[])
 		else
 		{
 			left_click = 0;
-			left_click_released = 0;
+			mouse.left_click_released = 0;
 			timer_restart(mouse.left_click_held);
 
 			mouse.middle_click = 0;

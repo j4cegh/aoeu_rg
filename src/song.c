@@ -1176,7 +1176,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 		{
 			if
 			(
-			left_click_released
+			mouse.left_click_released
 			&&
 			rg.is_mouse_on_playfield
 			&&
@@ -1218,7 +1218,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 				song_clear_selected_objects(ptr);
 				song_unselect_object(ptr);
 			}
-			else if(left_click_released && get_distf(mouse.x, mouse.y, mouse.x_on_click, mouse.y_on_click) <= 1)
+			else if(mouse.left_click_released && get_distf(mouse.x, mouse.y, mouse.x_on_click, mouse.y_on_click) <= 1)
 			{
 				float div = SONG_PFW / ptr->grid_resolution;
 				float snap_x = clamp(round(rg.mop_x / div) * div, 0, SONG_PFW);

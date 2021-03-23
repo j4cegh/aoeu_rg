@@ -84,7 +84,7 @@ void button_update(button *ptr)
 		text_set_color(ptr->button_text, ptr->col);
 	}
 
-	char clicked = (left_click_released) && ptr->hovered && (ptr == rg.gui_render_end_of_frame);
+	char clicked = (mouse.left_click_released) && ptr->hovered && (ptr == rg.gui_render_end_of_frame);
 
 	if(clicked && oc_in_bounds)
 	{

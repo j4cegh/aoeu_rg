@@ -265,7 +265,7 @@ void console_tick(console *ptr)
 		ptr->drag_scroll = 1;
 		ptr->bar->cur_value -= mouse.delta_y * sbdh;
 	}
-	else if(left_click_released && ptr->drag_scroll)
+	else if(mouse.left_click_released && ptr->drag_scroll)
 	{
 		ptr->drag_scroll = 0;
 		ptr->bar->velocity = mouse.release_velocity_y / 2;

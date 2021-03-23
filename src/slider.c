@@ -633,7 +633,7 @@ void slider_update(slider *ptr)
 		{
 			if(left_click == 0)
 			{
-				if(left_click_released) song_capture_undo_state(song);
+				if(mouse.left_click_released) song_capture_undo_state(song);
 				ptr->selected_control_point = NULL;
 			}
 			else

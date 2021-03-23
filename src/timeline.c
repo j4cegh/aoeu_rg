@@ -43,7 +43,7 @@ void timeline_tick(timeline *tl, struct song *song)
 			tl->drag_revs = 0;
 			tl->long_drag_ms = 0;
 		}
-		if(left_click_released || !rg.focus)
+		if(mouse.left_click_released || !rg.focus)
 		{
 			if(tl->moved_object) song_capture_undo_state(song);
 			tl->selected_obj = NULL;

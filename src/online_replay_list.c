@@ -218,7 +218,7 @@ void online_replay_list_tick(online_replay_list *ptr, float width_lim, float x, 
 		float a = 100;
 		color4 col = col_black;
 		if (e->hovered) col = col_white;
-		if(e->hovered && left_click_released && rg.gui_render_end_of_frame == ptr && click_good)
+		if(e->hovered && mouse.left_click_released && rg.gui_render_end_of_frame == ptr && click_good)
 		{
 			if(e->is_local)
 			{

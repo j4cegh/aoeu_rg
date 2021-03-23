@@ -54,7 +54,7 @@ void scroll_bar_tick(scroll_bar *ptr)
 			ptr->my_on_handle = mouse.y - (ptr->hr_pos.y - SCROLL_BAR_HANDLE_PADDING);
 		}
 
-		if(ptr->handle_clicked && left_click_released)
+		if(ptr->handle_clicked && mouse.left_click_released)
 		{
 			ptr->velocity = -mouse.release_velocity_y;
 		}

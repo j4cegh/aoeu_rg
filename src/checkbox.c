@@ -61,7 +61,7 @@ void checkbox_update(checkbox *ptr)
 
 	if(ptr->hovered) rg.gui_render_ptr = ptr;
 	
-	if(ptr->enabled && ptr->hovered && left_click_released && (rg.gui_render_end_of_frame == ptr))
+	if(ptr->enabled && ptr->hovered && mouse.left_click_released && (rg.gui_render_end_of_frame == ptr))
 	{
 		ptr->is_checked = !(ptr->is_checked);
 		ptr->clicked = 1;

@@ -58,7 +58,7 @@ void song_select_entry_click(song_select_entry* ptr, char enter)
 	else
 	{
 		if (ptr->no_data_files || rg.song->game_mode_objects->count < 1) change_screen(screen_editor);
-		else if (left_click_released || enter) change_screen(screen_player);
+		else if (mouse.left_click_released || enter) change_screen(screen_player);
 		else if (mouse.right_click_released) change_screen(screen_editor);
 		if(rg.to_screen != rg.screen)
 		{
@@ -417,7 +417,7 @@ void song_select_tick()
 				allow_hover_scroll = 0;
 			}
 			if(left_click) ss->y_scroll -= mouse.delta_y;
-			if(left_click_released) ss->y_scroll_speed = clamp(mouse.release_velocity_y, -7.0f, 7.0f);
+			if(mouse.left_click_released) ss->y_scroll_speed = clamp(mouse.release_velocity_y, -7.0f, 7.0f);
 		}
 
 		if(abs(ss->y_scroll_speed) < 0.05) allow_hover_scroll = 1;
