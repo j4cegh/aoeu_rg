@@ -3,7 +3,7 @@
 #include "timer.h"
 #include <SDL2/SDL_mouse.h>
 
-typedef struct
+typedef struct mouse_data
 {
 	float state_x;
 	float state_y;
@@ -37,13 +37,10 @@ typedef struct
 	timer *left_click_held;
 	timer *middle_click_held;
 	timer *right_click_held;
-	
 	int left_click;
 	char left_click_released;
-
 	int middle_click;
 	char middle_click_released;
-
 	int right_click;
 	char right_click_released;
 } mouse_data;
