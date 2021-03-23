@@ -365,7 +365,7 @@ void input_box_update(input_box *ptr)
 			ptr->xoff = clamp(ptr->xoff, 0, ptr->text_ptr->size.x - ptr->size.x);
 		}
 	}
-	else if(oc_inside && inside && right_click_released)
+	else if(oc_inside && inside && mouse.right_click_released)
 	{
 		current_input_box = ptr;
 		if((abs(ptr->char_select_index_end - ptr->char_select_index_start)) == 0)

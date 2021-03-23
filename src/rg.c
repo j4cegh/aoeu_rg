@@ -802,10 +802,10 @@ int main(int argc, char *argv[])
 	mouse.state_right = 0;
 	left_click = 0;
 	left_click_released = 0;
-	middle_click = 0;
-	middle_click_released = 0;
+	mouse.middle_click = 0;
+	mouse.middle_click_released = 0;
 	right_click = 0;
-	right_click_released = 0;
+	mouse.right_click_released = 0;
 	mouse.left_click_held = timer_init();
 	mouse.middle_click_held = timer_init();
 	mouse.right_click_held = timer_init();
@@ -1177,8 +1177,8 @@ int main(int argc, char *argv[])
 		if(rg.resized) SDL_GetWindowSize(rg.win, &rg.win_width_real, &rg.win_height_real);
 
 		left_click_released = 0;
-		middle_click_released = 0;
-		right_click_released = 0;
+		mouse.middle_click_released = 0;
+		mouse.right_click_released = 0;
 
 		if(rg.focus)
 		{
@@ -1204,18 +1204,18 @@ int main(int argc, char *argv[])
 					timer_restart(mouse.left_click_held);
 				}
 
-				if(good && mouse.state_middle) middle_click++;
+				if(good && mouse.state_middle) mouse.middle_click++;
 				else
 				{
-					if(good && middle_click > 0) middle_click_released = 1;
-					middle_click = 0;
+					if(good && mouse.middle_click > 0) mouse.middle_click_released = 1;
+					mouse.middle_click = 0;
 					timer_restart(mouse.middle_click_held);
 				}
 
 				if(good && mouse.state_right) right_click++;
 				else
 				{
-					if(good && right_click > 0) right_click_released = 1;
+					if(good && right_click > 0) mouse.right_click_released = 1;
 					right_click = 0;
 					timer_restart(mouse.right_click_held);
 				}
@@ -1230,21 +1230,21 @@ int main(int argc, char *argv[])
 			left_click_released = 0;
 			timer_restart(mouse.left_click_held);
 
-			middle_click = 0;
-			middle_click_released = 0;
+			mouse.middle_click = 0;
+			mouse.middle_click_released = 0;
 			timer_restart(mouse.middle_click_held);
 
 			right_click = 0;
-			right_click_released = 0;
+			mouse.right_click_released = 0;
 			timer_restart(mouse.right_click_held);
 		}
 
 		if(current_context_menu && mouse.button_released && !(current_context_menu->hovered)) current_context_menu->button_click_avoided = 0;
 
-		if((left_click > 0 || middle_click > 0 || right_click > 0) && !mouse.inside_window) mouse.outside_window_during_drag = 1;
-		else if(left_click + middle_click + right_click == 0) mouse.outside_window_during_drag = 0;
+		if((left_click > 0 || mouse.middle_click > 0 || right_click > 0) && !mouse.inside_window) mouse.outside_window_during_drag = 1;
+		else if(left_click + mouse.middle_click + right_click == 0) mouse.outside_window_during_drag = 0;
 
-		if(left_click == 1 || middle_click == 1 || right_click == 1)
+		if(left_click == 1 || mouse.middle_click == 1 || right_click == 1)
 		{
 			mouse.x_on_click_real = mouse.state_x;
 			mouse.y_on_click_real = mouse.state_y;
@@ -1274,7 +1274,7 @@ int main(int argc, char *argv[])
 		mouse.x_on_click = scale_value_to(mouse.x_on_click_real, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width);
 		mouse.y_on_click = scale_value_to(mouse.y_on_click_real, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height);
 
-		if(left_click || middle_click || right_click)
+		if(left_click || mouse.middle_click || right_click)
 		{
 			mouse.drag_delta_x = mouse.x - mouse.x_on_click;
 			mouse.drag_delta_y = mouse.y - mouse.y_on_click;
@@ -1287,7 +1287,7 @@ int main(int argc, char *argv[])
 
 		mouse.dragged = (mouse.drag_delta_x != 0 || mouse.drag_delta_y != 0);
 
-		if(left_click || middle_click || right_click)
+		if(left_click || mouse.middle_click || right_click)
 		{
 			mouse.release_velocity_x -= (mouse.delta_x / 2) * 0.05;
 			mouse.release_velocity_y -= (mouse.delta_y / 2) * 0.05;

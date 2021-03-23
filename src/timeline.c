@@ -32,7 +32,7 @@ void timeline_tick(timeline *tl, struct song *song)
 		float obj_radius = CIRCLE_RADIUS;
 		float timeline_circle_pos = rg.win_height - (obj_radius * timeline_circle_scale);
 		TIME_VAR mouse_ms = song->current_time_ms + ((mouse.x - rg.win_width_mid) / timeline_scale);
-		if(left_click == 1 || middle_click == 1 || right_click == 1) tl->mouse_ms_oc = mouse_ms;
+		if(left_click == 1 || mouse.middle_click == 1 || right_click == 1) tl->mouse_ms_oc = mouse_ms;
 		TIME_VAR mouse_ms_drag = mouse_ms - tl->mouse_ms_oc;
 		if(left_click == 0) mouse_ms_drag = 0;
 		TIME_VAR beat_div = song->beat_length_ms / song->beat_divisor;
@@ -130,7 +130,7 @@ void timeline_tick(timeline *tl, struct song *song)
 					if(left_click >= 1 && tl->selected_obj == NULL && (song->selected_objects->count > 0 ? me_selected : 1)) tl->selected_obj = obj;
 					else if(left_click == 0)
 					{
-						if(middle_click == 1 && !regen_obj_nums_aftr)
+						if(mouse.middle_click == 1 && !regen_obj_nums_aftr)
 						{
 							obj->new_combo = !obj->new_combo;
 							regen_obj_nums_aftr = 1;

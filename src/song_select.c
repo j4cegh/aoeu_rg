@@ -59,7 +59,7 @@ void song_select_entry_click(song_select_entry* ptr, char enter)
 	{
 		if (ptr->no_data_files || rg.song->game_mode_objects->count < 1) change_screen(screen_editor);
 		else if (left_click_released || enter) change_screen(screen_player);
-		else if (right_click_released) change_screen(screen_editor);
+		else if (mouse.right_click_released) change_screen(screen_editor);
 		if(rg.to_screen != rg.screen)
 		{
 			ss->bef_travel_y = ss->y_scroll;

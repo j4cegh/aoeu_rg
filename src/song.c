@@ -1326,7 +1326,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 				{
 					if(obj->hovered && !(ptr->selected_object != NULL && ptr->selected_object->slider != NULL && ptr->selected_object->is_new) && rg.is_mouse_on_click_op)
 					{
-						if(middle_click == 1 && !recalc_nums_after)
+						if(mouse.middle_click == 1 && !recalc_nums_after)
 						{
 							obj->new_combo = !obj->new_combo;
 							recalc_nums_after = 1;
