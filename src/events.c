@@ -271,7 +271,7 @@ void events()
 				SDL_ShowCursor(1);
 				exit_anyway = 0;
 			}
-			else rg.is_open = 0;
+			else change_screen(screen_exit);
 		}
 
 		if(event.type == SDL_WINDOWEVENT)
