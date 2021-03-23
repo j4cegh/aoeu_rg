@@ -1012,7 +1012,7 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 					}
 				}	
 			}
-			else if(!any_selected_obj_hovered && any_obj_hovered && left_click > 0)
+			else if(!any_selected_obj_hovered && any_obj_hovered && mouse.left_click > 0)
 			{
 				song_unselect_object(ptr);
 				song_clear_selected_objects(ptr);
@@ -1021,7 +1021,7 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 		else
 		{
 			object *obj = ptr->selected_object;
-			if(obj != NULL && obj->dragging && left_click > 0)
+			if(obj != NULL && obj->dragging && mouse.left_click > 0)
 			{
 				object_type type = ptr->selected_object->type;
 				if(type == object_circle)
@@ -1055,7 +1055,7 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 						obj->pos.x += sdx;
 						obj->pos.y += sdy;
 
-						if(mouse.moved || left_click == 1) slider_regenerate_texture(sl);
+						if(mouse.moved || mouse.left_click == 1) slider_regenerate_texture(sl);
 						obj->do_grid_snap = 1;
 					}
 				}
@@ -1104,14 +1104,14 @@ char song_tick_selection(song *ptr, char any_obj_hovered)
 				&&
 				!
 				(
-					left_click == 1
+					mouse.left_click == 1
 					&&
 					any_obj_hovered
 				)
 				&&
 				!ptr->slider_control_point_box_hovered
 				&&
-				left_click > 0
+				mouse.left_click > 0
 				&&
 				mouse.dragged
 				&&
@@ -1120,7 +1120,7 @@ char song_tick_selection(song *ptr, char any_obj_hovered)
 		if(selecting)
 		{
 			song_clear_selected_objects(ptr);
-			if(left_click == 1)
+			if(mouse.left_click == 1)
 			{
 				ptr->selection_rect.left = mouse.x;
 				ptr->selection_rect.top = mouse.y;
@@ -1213,7 +1213,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 		)
 		{
 			char slider_new_cp = (ptr->selected_object != NULL && ptr->selected_object->slider != NULL && rg.kp[SDL_SCANCODE_LCTRL]);
-			if(left_click == 1 && (ptr->selected_objects->count > 0 || ptr->selected_object != NULL) && !slider_new_cp)
+			if(mouse.left_click == 1 && (ptr->selected_objects->count > 0 || ptr->selected_object != NULL) && !slider_new_cp)
 			{
 				song_clear_selected_objects(ptr);
 				song_unselect_object(ptr);
@@ -1311,7 +1311,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 					}
 					if(obj->hovered && !(ptr->selected_object != NULL && ptr->selected_object->slider != NULL && ptr->selected_object->is_new))
 					{
-						if(left_click == 1) ptr->selected_object = obj;
+						if(mouse.left_click == 1) ptr->selected_object = obj;
 					}
 				}
 			}
@@ -1421,7 +1421,7 @@ void song_tick(song *ptr)
 
 	char any_obj_hovered = song_check_hovered(ptr);
 
-	if(left_click == 1) ptr->obj_hovered_on_click = any_obj_hovered;
+	if(mouse.left_click == 1) ptr->obj_hovered_on_click = any_obj_hovered;
 
 	song_tick_remove(ptr);
 
@@ -1441,7 +1441,7 @@ void song_tick(song *ptr)
 
 	if
 	(
-		left_click == 1
+		mouse.left_click == 1
 		&&
 		any_selected_obj_hovered
 		&&
@@ -1450,7 +1450,7 @@ void song_tick(song *ptr)
 		!ptr->slider_control_point_box_hovered
 	) ptr->dragging_selected_objects = 1;
 
-	if(ptr->dragging_selected_objects && (left_click == 0 || ptr->selected_objects->count < 1))
+	if(ptr->dragging_selected_objects && (mouse.left_click == 0 || ptr->selected_objects->count < 1))
 	{
 		ptr->dragging_selected_objects = 0;
 		list_node *n;

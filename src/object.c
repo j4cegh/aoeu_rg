@@ -205,8 +205,8 @@ void object_update(object *ptr)
 
     if(rg.screen == screen_editor && rg.gui_render_end_of_frame == ptr->host_song)
     {
-        if(ptr->hovered && left_click == 1) ptr->dragging = 1;
-        if(ptr->dragging && left_click == 0)
+        if(ptr->hovered && mouse.left_click == 1) ptr->dragging = 1;
+        if(ptr->dragging && mouse.left_click == 0)
         {
             ptr->dragging = 0;
 

@@ -45,10 +45,10 @@ void scroll_bar_tick(scroll_bar *ptr)
 
 	if(ptr->work_if_console_is_open || !cons_ptr->activated)
 	{
-		int left_pressed = left_click;
+		int left_pressed = mouse.left_click;
 
 		char on_bar = mouse.x >= ptr->hr_pos.x && mouse.y >= ptr->hr_pos.y && mouse.x_on_click <= ptr->hr_pos.x + ptr->hr_size.x && mouse.y_on_click <= ptr->hr_pos.y + ptr->hr_size.y;
-		if(on_bar && left_click == 1)
+		if(on_bar && mouse.left_click == 1)
 		{
 			ptr->handle_clicked = 1;
 			ptr->my_on_handle = mouse.y - (ptr->hr_pos.y - SCROLL_BAR_HANDLE_PADDING);

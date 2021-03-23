@@ -34,7 +34,7 @@ void slider_bar_update(slider_bar *ptr)
         mouse.y_on_click >= ptr->pos.y &&
         mouse.y_on_click <= ptr->pos.y + ptr->bar_size.y;
     
-    if(ptr->hovered_oc && left_click)
+    if(ptr->hovered_oc && mouse.left_click)
     {
         ptr->x_on_bar = clamp(mouse.x - ptr->pos.x, 0, ptr->bar_size.x);
         ptr->val = scale_value_to(ptr->x_on_bar, 0, ptr->bar_size.x, 0, 100);

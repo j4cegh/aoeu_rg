@@ -318,21 +318,21 @@ void input_box_update(input_box *ptr)
 	char inside = mouse.x >= ptr->pos.x && mouse.y >= ptr->pos.y && mouse.x <= ptr->pos.x + rect.width && mouse.y <= ptr->pos.y + rect.height;
 	char oc_inside = mouse.x_on_click >= ptr->pos.x && mouse.y_on_click >= ptr->pos.y && mouse.x_on_click <= ptr->pos.x + rect.width && mouse.y_on_click <= ptr->pos.y + rect.height;
 	if(mouse.y < 0) inside = 0;
-	if(inside && (left_click == 1) && !cons_ptr->activated && !cons_ptr->is_animating && (ptr == rg.gui_render_end_of_frame) && !current_context_menu)
+	if(inside && (mouse.left_click == 1) && !cons_ptr->activated && !cons_ptr->is_animating && (ptr == rg.gui_render_end_of_frame) && !current_context_menu)
 	{
 		current_input_box = ptr;
 	}
 
-	if(!(current_input_box == ptr) && left_click) input_box_reset_selection(ptr);
+	if(!(current_input_box == ptr) && mouse.left_click) input_box_reset_selection(ptr);
 
-	if(left_click == 1 && current_input_box == ptr && inside && !(ptr->menu->activated))
+	if(mouse.left_click == 1 && current_input_box == ptr && inside && !(ptr->menu->activated))
 	{
 		ptr->caret_pos_at_start_of_click = get_char_index_closest_to_mouse(ptr, 1);
 		ptr->caret_index = ptr->caret_pos_at_start_of_click;
 		input_box_reset_selection(ptr);
 		ptr->is_selecting_with_mouse = 1;
 	}
-	else if(oc_inside && left_click > 1 && current_input_box == ptr && !(ptr->menu->activated))
+	else if(oc_inside && mouse.left_click > 1 && current_input_box == ptr && !(ptr->menu->activated))
 	{
 		int cur_mouse_char_pos = get_char_index_closest_to_mouse(ptr, 0);
 		if(cur_mouse_char_pos < ptr->caret_pos_at_start_of_click) ptr->sel_state = input_box_sel_state_left;

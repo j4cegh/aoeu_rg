@@ -259,9 +259,9 @@ void console_tick(console *ptr)
 	scroll_bar_tick(ptr->bar);
 
 	float sbdh = (ptr->bar->hr_size.y / ptr->bar->height);
-	if(left_click && !ptr->bar->handle_clicked)
+	if(mouse.left_click && !ptr->bar->handle_clicked)
 	{
-		if(left_click == 1) ptr->bar->velocity = 0.0f;
+		if(mouse.left_click == 1) ptr->bar->velocity = 0.0f;
 		ptr->drag_scroll = 1;
 		ptr->bar->cur_value -= mouse.delta_y * sbdh;
 	}

@@ -800,7 +800,7 @@ int main(int argc, char *argv[])
 	mouse.state_left = 0;
 	mouse.state_middle = 0;
 	mouse.state_right = 0;
-	left_click = 0;
+	mouse.left_click = 0;
 	mouse.left_click_released = 0;
 	mouse.middle_click = 0;
 	mouse.middle_click_released = 0;
@@ -1196,11 +1196,11 @@ int main(int argc, char *argv[])
 			}
 			else if(cbt >= CLICK_BLOCK_TIME_MS)
 			{
-				if(good && mouse.state_left) left_click++;
+				if(good && mouse.state_left) mouse.left_click++;
 				else
 				{
-					if(good && left_click > 0) mouse.left_click_released = 1;
-					left_click = 0;
+					if(good && mouse.left_click > 0) mouse.left_click_released = 1;
+					mouse.left_click = 0;
 					timer_restart(mouse.left_click_held);
 				}
 
@@ -1226,7 +1226,7 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-			left_click = 0;
+			mouse.left_click = 0;
 			mouse.left_click_released = 0;
 			timer_restart(mouse.left_click_held);
 
@@ -1241,10 +1241,10 @@ int main(int argc, char *argv[])
 
 		if(current_context_menu && mouse.button_released && !(current_context_menu->hovered)) current_context_menu->button_click_avoided = 0;
 
-		if((left_click > 0 || mouse.middle_click > 0 || mouse.right_click > 0) && !mouse.inside_window) mouse.outside_window_during_drag = 1;
-		else if(left_click + mouse.middle_click + mouse.right_click == 0) mouse.outside_window_during_drag = 0;
+		if((mouse.left_click > 0 || mouse.middle_click > 0 || mouse.right_click > 0) && !mouse.inside_window) mouse.outside_window_during_drag = 1;
+		else if(mouse.left_click + mouse.middle_click + mouse.right_click == 0) mouse.outside_window_during_drag = 0;
 
-		if(left_click == 1 || mouse.middle_click == 1 || mouse.right_click == 1)
+		if(mouse.left_click == 1 || mouse.middle_click == 1 || mouse.right_click == 1)
 		{
 			mouse.x_on_click_real = mouse.state_x;
 			mouse.y_on_click_real = mouse.state_y;
@@ -1274,7 +1274,7 @@ int main(int argc, char *argv[])
 		mouse.x_on_click = scale_value_to(mouse.x_on_click_real, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width);
 		mouse.y_on_click = scale_value_to(mouse.y_on_click_real, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height);
 
-		if(left_click || mouse.middle_click || mouse.right_click)
+		if(mouse.left_click || mouse.middle_click || mouse.right_click)
 		{
 			mouse.drag_delta_x = mouse.x - mouse.x_on_click;
 			mouse.drag_delta_y = mouse.y - mouse.y_on_click;
@@ -1287,7 +1287,7 @@ int main(int argc, char *argv[])
 
 		mouse.dragged = (mouse.drag_delta_x != 0 || mouse.drag_delta_y != 0);
 
-		if(left_click || mouse.middle_click || mouse.right_click)
+		if(mouse.left_click || mouse.middle_click || mouse.right_click)
 		{
 			mouse.release_velocity_x -= (mouse.delta_x / 2) * 0.05;
 			mouse.release_velocity_y -= (mouse.delta_y / 2) * 0.05;
@@ -1332,7 +1332,7 @@ int main(int argc, char *argv[])
 
 		if(!rg.replay_mode_enabled && !rg.bot_enabled)
 		{
-			if(rg.kp[rg.ouendan_keycode_1] || (!rg.disable_mouse_buttons && left_click)) rg.ouendan_click_1++;
+			if(rg.kp[rg.ouendan_keycode_1] || (!rg.disable_mouse_buttons && mouse.left_click)) rg.ouendan_click_1++;
 			else rg.ouendan_click_1 = 0;
 			if(rg.kp[rg.ouendan_keycode_2] || (!rg.disable_mouse_buttons && mouse.right_click)) rg.ouendan_click_2++;
 			else rg.ouendan_click_2 = 0;
@@ -1449,7 +1449,7 @@ int main(int argc, char *argv[])
 			char *dev_url = "https://github.com/aoeu1/aoeu_rg/";
 			text3_fmt_rect(ltr, rg.win_width, rg.win_height, rg.win_width, 255, origin_right, origin_bottom, text3_justification_right, "~u%s", dev_url);
 			char ltri = FR_CONTAINS2(ltr, mouse.x, mouse.y);
-			if(ltri && left_click == 1) open_url("https://github.com/aoeu1/aoeu_rg/");
+			if(ltri && mouse.left_click == 1) open_url("https://github.com/aoeu1/aoeu_rg/");
 		}
 		else if(rg.screen == screen_song_select)
 		{
@@ -1473,21 +1473,21 @@ int main(int argc, char *argv[])
 
 			slider_bar_update(rg.opts_master_vol_bar);
 			slider_bar_set_pos(rg.opts_master_vol_bar, xo, yv);
-			if(left_click && rg.opts_master_vol_bar->hovered_oc) rg.master_vol = rg.opts_master_vol_bar->val;
+			if(mouse.left_click && rg.opts_master_vol_bar->hovered_oc) rg.master_vol = rg.opts_master_vol_bar->val;
 			else slider_bar_set_val(rg.opts_master_vol_bar, rg.master_vol);
 			slider_bar_render(rg.opts_master_vol_bar);
 			yv += rg.opts_master_vol_bar->size.y + ypad;
 
 			slider_bar_update(rg.opts_music_vol_bar);
 			slider_bar_set_pos(rg.opts_music_vol_bar, xo, yv);
-			if(left_click && rg.opts_music_vol_bar->hovered_oc) rg.music_vol = rg.opts_music_vol_bar->val;
+			if(mouse.left_click && rg.opts_music_vol_bar->hovered_oc) rg.music_vol = rg.opts_music_vol_bar->val;
 			else slider_bar_set_val(rg.opts_music_vol_bar, rg.music_vol);
 			slider_bar_render(rg.opts_music_vol_bar);
 			yv += rg.opts_music_vol_bar->size.y + ypad;
 
 			slider_bar_update(rg.opts_effect_vol_bar);
 			slider_bar_set_pos(rg.opts_effect_vol_bar, xo, yv);
-			if(left_click && rg.opts_effect_vol_bar->hovered_oc)
+			if(mouse.left_click && rg.opts_effect_vol_bar->hovered_oc)
 			{
 				rg.effect_vol = rg.opts_effect_vol_bar->val;
 				apply_volume();
@@ -1499,7 +1499,7 @@ int main(int argc, char *argv[])
 
 			slider_bar_update(rg.opts_bg_dim_bar);
 			slider_bar_set_pos(rg.opts_bg_dim_bar, xo, yv);
-			if(left_click && rg.opts_bg_dim_bar->hovered_oc) rg.bg_dim_level = rg.opts_bg_dim_bar->val;
+			if(mouse.left_click && rg.opts_bg_dim_bar->hovered_oc) rg.bg_dim_level = rg.opts_bg_dim_bar->val;
 			else slider_bar_set_val(rg.opts_bg_dim_bar, rg.bg_dim_level);
 			slider_bar_render(rg.opts_bg_dim_bar);
 			yv += rg.opts_bg_dim_bar->size.y + ypad;
@@ -1714,7 +1714,7 @@ int main(int argc, char *argv[])
 				}
 			}
 
-			if(left_click == 1 || mouse.right_click == 1)
+			if(mouse.left_click == 1 || mouse.right_click == 1)
 			{
 				rg.mop_xoc = rg.mop_x;
 				rg.mop_yoc = rg.mop_y;

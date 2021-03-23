@@ -411,12 +411,12 @@ void song_select_tick()
 		
 		if(rg.gui_render_end_of_frame == ss)
 		{
-			if(left_click == 1) 
+			if(mouse.left_click == 1) 
 			{
 				ss->y_scroll_speed = 0;
 				allow_hover_scroll = 0;
 			}
-			if(left_click) ss->y_scroll -= mouse.delta_y;
+			if(mouse.left_click) ss->y_scroll -= mouse.delta_y;
 			if(mouse.left_click_released) ss->y_scroll_speed = clamp(mouse.release_velocity_y, -7.0f, 7.0f);
 		}
 
@@ -454,7 +454,7 @@ void song_select_tick()
 			}
 			float myheight = SONG_SELECT_ENTRY_HEIGHT * e->scale;
 			float wantedx = e->hovered ? -50 : (abs(y -middle) / 10);
-			float diff = (rg.frame_delta_ms / 4) * (abs(ss->y_scroll_speed) > 1 || left_click > 0 ? 0.1 : 1);
+			float diff = (rg.frame_delta_ms / 4) * (abs(ss->y_scroll_speed) > 1 || mouse.left_click > 0 ? 0.1 : 1);
 			if(e->x > wantedx)
 			{
 				e->x -= diff;

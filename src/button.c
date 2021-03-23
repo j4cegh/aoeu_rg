@@ -55,7 +55,7 @@ void button_update(button *ptr)
 	ptr->hover_frames++;
 	if(!(ptr->hovered))
 	{
-		if(ptr->host_cmenu && left_click > 0 && ptr->hover_frames > 0)
+		if(ptr->host_cmenu && mouse.left_click > 0 && ptr->hover_frames > 0)
 			ptr->host_cmenu->button_click_avoided = 1;
 		ptr->hovered = 0;
 		ptr->hover_frames = 0;
@@ -93,7 +93,7 @@ void button_update(button *ptr)
 	}
 	else ptr->clicked = 0;
 
-	if(!(ptr->flashing) && left_click && oc_in_bounds)
+	if(!(ptr->flashing) && mouse.left_click && oc_in_bounds)
 	{
 		ptr->bg_col = col_black;
 		ptr->outline_col = col_white;

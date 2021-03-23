@@ -32,11 +32,11 @@ void timeline_tick(timeline *tl, struct song *song)
 		float obj_radius = CIRCLE_RADIUS;
 		float timeline_circle_pos = rg.win_height - (obj_radius * timeline_circle_scale);
 		TIME_VAR mouse_ms = song->current_time_ms + ((mouse.x - rg.win_width_mid) / timeline_scale);
-		if(left_click == 1 || mouse.middle_click == 1 || mouse.right_click == 1) tl->mouse_ms_oc = mouse_ms;
+		if(mouse.left_click == 1 || mouse.middle_click == 1 || mouse.right_click == 1) tl->mouse_ms_oc = mouse_ms;
 		TIME_VAR mouse_ms_drag = mouse_ms - tl->mouse_ms_oc;
-		if(left_click == 0) mouse_ms_drag = 0;
+		if(mouse.left_click == 0) mouse_ms_drag = 0;
 		TIME_VAR beat_div = song->beat_length_ms / song->beat_divisor;
-		if(left_click == 0 && tl->long_drag)
+		if(mouse.left_click == 0 && tl->long_drag)
 		{
 			tl->long_drag = 0;
 			tl->selected_obj = NULL;
@@ -66,7 +66,7 @@ void timeline_tick(timeline *tl, struct song *song)
 		{
 			object *obj = obn->val;
 			obj->relative_time_ms = song->current_time_ms - obj->start_time_ms;
-			if(left_click == 1) obj->tl_drag_rel_time_ms = mouse_ms - obj->start_time_ms;
+			if(mouse.left_click == 1) obj->tl_drag_rel_time_ms = mouse_ms - obj->start_time_ms;
 			
 			v2f sc = V2F(timeline_circle_scale * obj_scale_modifier, timeline_circle_scale * obj_scale_modifier);
 
@@ -127,8 +127,8 @@ void timeline_tick(timeline *tl, struct song *song)
 				}
 				if((hovered || long_hovered) && !tl->selecting)
 				{
-					if(left_click >= 1 && tl->selected_obj == NULL && (song->selected_objects->count > 0 ? me_selected : 1)) tl->selected_obj = obj;
-					else if(left_click == 0)
+					if(mouse.left_click >= 1 && tl->selected_obj == NULL && (song->selected_objects->count > 0 ? me_selected : 1)) tl->selected_obj = obj;
+					else if(mouse.left_click == 0)
 					{
 						if(mouse.middle_click == 1 && !regen_obj_nums_aftr)
 						{
@@ -243,10 +243,10 @@ void timeline_tick(timeline *tl, struct song *song)
 					}
 
 					float radius = obj_radius * sc.x;
-					char long_drag_hovered = (left_click == 0 || get_distf(long_ex, long_middle_y, mouse.x_on_click, mouse.y_on_click) <= radius / 2) && get_distf(long_ex, long_middle_y, mouse.x, mouse.y) <= radius / 2;
+					char long_drag_hovered = (mouse.left_click == 0 || get_distf(long_ex, long_middle_y, mouse.x_on_click, mouse.y_on_click) <= radius / 2) && get_distf(long_ex, long_middle_y, mouse.x, mouse.y) <= radius / 2;
 					if(long_drag_hovered && !tl->long_drag && song->selected_objects->count == 0 && rg.gui_render_end_of_frame == song)
 					{
-						if(left_click == 1)
+						if(mouse.left_click == 1)
 						{
 							tl->long_drag = 1;
 							tl->selected_obj = obj;
@@ -288,7 +288,7 @@ void timeline_tick(timeline *tl, struct song *song)
 
 		if(tl->long_drag)
 		{
-			if(tl->selected_obj && left_click && rg.gui_render_end_of_frame == song)
+			if(tl->selected_obj && mouse.left_click && rg.gui_render_end_of_frame == song)
 			{
 				mouse.cursor_type = SDL_SYSTEM_CURSOR_SIZEWE;
 				if(tl->selected_obj->type == object_slider)
@@ -345,10 +345,10 @@ void timeline_tick(timeline *tl, struct song *song)
 				}
 				if(tl->moved_object_once) song_sort_objects(song);
 			}
-			else if(!tl->selected_obj && left_click > 0 && mouse.y_on_click >= rg.win_height - obj_radius && rg.gui_render_end_of_frame == song)
+			else if(!tl->selected_obj && mouse.left_click > 0 && mouse.y_on_click >= rg.win_height - obj_radius && rg.gui_render_end_of_frame == song)
 			{
 				song_clear_selected_objects(song);
-				if(left_click == 1) tl->sel_ms = mouse_ms;
+				if(mouse.left_click == 1) tl->sel_ms = mouse_ms;
 				float sel_start_x = (clamp(tl->sel_ms, 0, song->length_ms) * timeline_scale) - timeline_view;
 				float sel_end_x = (clamp(mouse_ms, 0, song->length_ms) * timeline_scale) - timeline_view;
 				float lst = return_lowest(tl->sel_ms, mouse_ms);

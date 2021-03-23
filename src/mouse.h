@@ -38,7 +38,7 @@ typedef struct
 	timer *middle_click_held;
 	timer *right_click_held;
 	
-	
+	int left_click;
 	char left_click_released;
 
 	int middle_click;
@@ -49,5 +49,3 @@ typedef struct
 } mouse_data;
 
 extern mouse_data mouse;
-
-extern int left_click;

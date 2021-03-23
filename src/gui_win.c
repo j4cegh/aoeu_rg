@@ -102,13 +102,13 @@ void gui_win_check_grab(gui_win *ptr)
 	int handle_bottom = y + ptr->handle_text->size.y;
 	ptr->yu = handle_bottom;
 
-	if(left_click <= 2)
+	if(mouse.left_click <= 2)
 	{
 		ptr->rel_handle_mx = relmx;
 		ptr->rel_handle_my = relmy;
 	}
 
-	int left_pressed = left_click;
+	int left_pressed = mouse.left_click;
 
 	if(!left_pressed)
 	{
@@ -120,7 +120,7 @@ void gui_win_check_grab(gui_win *ptr)
 
 	if(rg.gui_render_end_of_frame != ptr) return;
 
-	if(left_click && (ptr->is_hovered))
+	if(mouse.left_click && (ptr->is_hovered))
 		gui_win_man_set_active(ptr);
 
 	if(ptr->is_handle_hovered && left_pressed && (ptr == gui_win_man_get_active() || ptr->not_in_win_man))

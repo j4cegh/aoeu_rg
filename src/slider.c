@@ -538,7 +538,7 @@ void slider_update(slider *ptr)
 				}
 			}
 
-			if(left_click == 1)
+			if(mouse.left_click == 1)
 			{
 				slider_add_control_point(ptr, V2F(sox, soy));
 				slider_calculate_path(ptr, 0);
@@ -558,7 +558,7 @@ void slider_update(slider *ptr)
 				}
 			}
 
-			if(mouse.moved || left_click == 1) slider_calculate_path(ptr, 0);
+			if(mouse.moved || mouse.left_click == 1) slider_calculate_path(ptr, 0);
 		}
 		else if
 		(
@@ -576,7 +576,7 @@ void slider_update(slider *ptr)
 			else box_size = V2F(SLIDER_CONTROL_POINT_SIZE_NO_TEX, SLIDER_CONTROL_POINT_SIZE_NO_TEX);
 
 			list_node *n;
-			if(rg.kp[SDL_SCANCODE_LCTRL] && left_click == 1)
+			if(rg.kp[SDL_SCANCODE_LCTRL] && mouse.left_click == 1)
 			{
 				float dist_from_mouse = INFINITY;
 				list_node *near_n = NULL;
@@ -614,7 +614,7 @@ void slider_update(slider *ptr)
 					{
 						song->slider_control_point_box_hovered = 1;
 
-						if(ptr->selected_control_point == NULL && left_click == 1) ptr->selected_control_point = p;
+						if(ptr->selected_control_point == NULL && mouse.left_click == 1) ptr->selected_control_point = p;
 						else if(ptr->selected_control_point == NULL && ptr->control_points->count > 2 && mouse.right_click == 1)
 						{
 							slider_control_point_free(p);
@@ -631,7 +631,7 @@ void slider_update(slider *ptr)
 
 		if(ptr->selected_control_point != NULL && !obj->is_new)
 		{
-			if(left_click == 0)
+			if(mouse.left_click == 0)
 			{
 				if(mouse.left_click_released) song_capture_undo_state(song);
 				ptr->selected_control_point = NULL;
@@ -646,7 +646,7 @@ void slider_update(slider *ptr)
 				song->selected_object = obj;
 			}
 
-			if(mouse.moved || left_click == 1)
+			if(mouse.moved || mouse.left_click == 1)
 			{
 				GLuint bef = ptr->tex;
 				slider_calculate_path(ptr, 0);

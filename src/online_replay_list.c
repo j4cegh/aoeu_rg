@@ -200,7 +200,7 @@ void online_replay_list_tick(online_replay_list *ptr, float width_lim, float x, 
 	}
 	char in_bounds_oc = mouse.x_on_click >= x && mouse.x_on_click <= x + width_lim && mouse.y_on_click >= y && mouse.y_on_click <= y + maxh;
 	char in_bounds = mouse.x >= x && mouse.x <= x + width_lim && mouse.y >= y && mouse.y <= y + maxh;
-	if (left_click && in_bounds_oc && rg.gui_render_end_of_frame == ptr) ptr->scroll_y -= mouse.delta_y;
+	if (mouse.left_click && in_bounds_oc && rg.gui_render_end_of_frame == ptr) ptr->scroll_y -= mouse.delta_y;
 	list_node *n;
 	ptr->scroll_y = clamp(ptr->scroll_y, 0, allh - maxh);
 	float xo = x;
