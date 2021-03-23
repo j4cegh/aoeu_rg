@@ -260,7 +260,7 @@ void timeline_tick(timeline *tl, struct song *song)
 								tl->long_drag_ms = tl->selected_obj->length_time_ms;
 							}
 						}
-						cursor_type = SDL_SYSTEM_CURSOR_SIZEWE;
+						mouse.cursor_type = SDL_SYSTEM_CURSOR_SIZEWE;
 					}
 				}
 
@@ -290,7 +290,7 @@ void timeline_tick(timeline *tl, struct song *song)
 		{
 			if(tl->selected_obj && left_click && rg.gui_render_end_of_frame == song)
 			{
-				cursor_type = SDL_SYSTEM_CURSOR_SIZEWE;
+				mouse.cursor_type = SDL_SYSTEM_CURSOR_SIZEWE;
 				if(tl->selected_obj->type == object_slider)
 				{
 					slider *slider = tl->selected_obj->slider;

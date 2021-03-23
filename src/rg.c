@@ -777,8 +777,8 @@ int main(int argc, char *argv[])
 	mouse.state_y = 0;
 	mouse.x = 0;
 	mouse.y = 0;
-	gui_mouse_x = 0;
-	gui_mouse_y = 0;
+	mouse.gui_x = 0;
+	mouse.gui_y = 0;
 	mouse.x_on_click = 0;
 	mouse.x_on_click_real = 0;
 	mouse.y_on_click = 0;
@@ -806,12 +806,12 @@ int main(int argc, char *argv[])
 	middle_click_released = 0;
 	right_click = 0;
 	right_click_released = 0;
-	left_click_held = timer_init();
-	middle_click_held = timer_init();
-	right_click_held = timer_init();
+	mouse.left_click_held = timer_init();
+	mouse.middle_click_held = timer_init();
+	mouse.right_click_held = timer_init();
 	mouse.moved_clock = timer_init();
 	mouse.button_released = 0;
-	cursor_type = SDL_SYSTEM_CURSOR_ARROW;
+	mouse.cursor_type = SDL_SYSTEM_CURSOR_ARROW;
 
 	rg.gui_view_scale = 1.0f;
 	rg.gui_view_xoff = 0;
@@ -1201,7 +1201,7 @@ int main(int argc, char *argv[])
 				{
 					if(good && left_click > 0) left_click_released = 1;
 					left_click = 0;
-					timer_restart(left_click_held);
+					timer_restart(mouse.left_click_held);
 				}
 
 				if(good && mouse.state_middle) middle_click++;
@@ -1209,7 +1209,7 @@ int main(int argc, char *argv[])
 				{
 					if(good && middle_click > 0) middle_click_released = 1;
 					middle_click = 0;
-					timer_restart(middle_click_held);
+					timer_restart(mouse.middle_click_held);
 				}
 
 				if(good && mouse.state_right) right_click++;
@@ -1217,7 +1217,7 @@ int main(int argc, char *argv[])
 				{
 					if(good && right_click > 0) right_click_released = 1;
 					right_click = 0;
-					timer_restart(right_click_held);
+					timer_restart(mouse.right_click_held);
 				}
 			}
 
@@ -1228,15 +1228,15 @@ int main(int argc, char *argv[])
 		{
 			left_click = 0;
 			left_click_released = 0;
-			timer_restart(left_click_held);
+			timer_restart(mouse.left_click_held);
 
 			middle_click = 0;
 			middle_click_released = 0;
-			timer_restart(middle_click_held);
+			timer_restart(mouse.middle_click_held);
 
 			right_click = 0;
 			right_click_released = 0;
-			timer_restart(right_click_held);
+			timer_restart(mouse.right_click_held);
 		}
 
 		if(current_context_menu && mouse.button_released && !(current_context_menu->hovered)) current_context_menu->button_click_avoided = 0;
@@ -1263,13 +1263,13 @@ int main(int argc, char *argv[])
 		gluOrtho2D(view_rect.left, view_rect.left + view_rect.width, view_rect.top + view_rect.height, view_rect.top);
 
 		v2f mpf = V2F(scale_value_to(mouse.state_x, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width), scale_value_to(mouse.state_y, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height));
-		mouse.delta_x = mpf.x - gui_mouse_x;
-		mouse.delta_y = mpf.y - gui_mouse_y;
+		mouse.delta_x = mpf.x - mouse.gui_x;
+		mouse.delta_y = mpf.y - mouse.gui_y;
 		if(mouse.delta_x != 0 || mouse.delta_y != 0) mouse.moved = 1;
 		mouse.x = mpf.x;
 		mouse.y = mpf.y;
-		gui_mouse_x = mpf.x;
-		gui_mouse_y = mpf.y;
+		mouse.gui_x = mpf.x;
+		mouse.gui_y = mpf.y;
 
 		mouse.x_on_click = scale_value_to(mouse.x_on_click_real, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width);
 		mouse.y_on_click = scale_value_to(mouse.y_on_click_real, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height);
@@ -1952,9 +1952,9 @@ int main(int argc, char *argv[])
 
 		if(mouse.moved && timer_bool(mouse.moved_clock, MOUSE_MOVED_DECAY_MS)) mouse.moved = 0;
 
-		if(cursor_type == SDL_SYSTEM_CURSOR_ARROW) SDL_SetCursor(arrow_cursor);
-		if(cursor_type == SDL_SYSTEM_CURSOR_SIZEWE) SDL_SetCursor(horiz_cursor);
-		cursor_type = SDL_SYSTEM_CURSOR_ARROW;
+		if(mouse.cursor_type == SDL_SYSTEM_CURSOR_ARROW) SDL_SetCursor(arrow_cursor);
+		if(mouse.cursor_type == SDL_SYSTEM_CURSOR_SIZEWE) SDL_SetCursor(horiz_cursor);
+		mouse.cursor_type = SDL_SYSTEM_CURSOR_ARROW;
 
 		rg.gui_render_end_of_frame = rg.gui_render_ptr;
 
@@ -2069,9 +2069,9 @@ int main(int argc, char *argv[])
 	config_deinit();
 
 	timer_free(mouse.moved_clock);
-	timer_free(right_click_held);
-	timer_free(middle_click_held);
-	timer_free(left_click_held);
+	timer_free(mouse.right_click_held);
+	timer_free(mouse.middle_click_held);
+	timer_free(mouse.left_click_held);
 
 	timer_free(mouse.release_velocity_timer);
 

@@ -137,7 +137,7 @@ void button_update(button *ptr)
 		}
 	}
 
-	if(ptr->hovered && (timer_milliseconds(left_click_held) >= ptr->held_time_min) && oc_in_bounds && (ptr == rg.gui_render_end_of_frame))
+	if(ptr->hovered && (timer_milliseconds(mouse.left_click_held) >= ptr->held_time_min) && oc_in_bounds && (ptr == rg.gui_render_end_of_frame))
 	{
 		ptr->bg_col = color4_gen_alpha(20, 20, 20, 255);
 		text_set_color(ptr->button_text, color4_gen_alpha(50, 50, 50, 255));

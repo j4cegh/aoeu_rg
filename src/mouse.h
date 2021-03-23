@@ -31,18 +31,19 @@ typedef struct
 	char state_right;
 	timer *moved_clock;
 	char button_released;
+	SDL_SystemCursor cursor_type;
+	float gui_x;
+	float gui_y;
+	timer *left_click_held;
+	timer *middle_click_held;
+	timer *right_click_held;
 } mouse_data;
 
 extern mouse_data mouse;
-extern float gui_mouse_x;
-extern float gui_mouse_y;
+
 extern int left_click;
-extern char left_click_released;
 extern int middle_click;
-extern char middle_click_released;
 extern int right_click;
+extern char left_click_released;
+extern char middle_click_released;
 extern char right_click_released;
-extern timer *left_click_held;
-extern timer *middle_click_held;
-extern timer *right_click_held;
-extern SDL_SystemCursor cursor_type;
