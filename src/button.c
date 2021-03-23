@@ -51,7 +51,7 @@ void button_set_to_oc_cmenu(button *ptr)
 void button_update(button *ptr)
 {
 	float_rect rect = FLOATRECT(ptr->pos.x, ptr->pos.y, ptr->pos.x + ptr->size.x, ptr->pos.y + ptr->size.y);
-	ptr->hovered = mouse_x >= ptr->pos.x && mouse_y >= ptr->pos.y && mouse_x <= (rect.width - PADDING) && mouse_y <= (rect.height - PADDING);
+	ptr->hovered = mouse.x >= ptr->pos.x && mouse.y >= ptr->pos.y && mouse.x <= (rect.width - PADDING) && mouse.y <= (rect.height - PADDING);
 	ptr->hover_frames++;
 	if(!(ptr->hovered))
 	{
@@ -70,7 +70,7 @@ void button_update(button *ptr)
 		return;
 	}
 
-	char oc_in_bounds = mouse_x_on_click >= ptr->pos.x && mouse_y_on_click >= ptr->pos.y && mouse_x_on_click <= rect.width && mouse_y_on_click <= rect.height;
+	char oc_in_bounds = mouse.x_on_click >= ptr->pos.x && mouse.y_on_click >= ptr->pos.y && mouse.x_on_click <= rect.width && mouse.y_on_click <= rect.height;
 	if(ptr->hovered && (ptr == rg.gui_render_end_of_frame))
 	{
 		ptr->bg_col = ptr->col;

@@ -215,7 +215,7 @@ void render_change_mode_button(float x, float y)
 	if(btn->hovered)
 	{
 		rg.gui_render_ptr = btn;
-		if(rg.gui_render_end_of_frame == btn) text3_fmt(mouse_x, mouse_y - btn->size.y, rg.win_width_mid, 255, origin_center, origin_bottom, text3_justification_left, "~u%s", "click to change game mode");
+		if(rg.gui_render_end_of_frame == btn) text3_fmt(mouse.x, mouse.y - btn->size.y, rg.win_width_mid, 255, origin_center, origin_bottom, text3_justification_left, "~u%s", "click to change game mode");
 	}
 	if(btn->clicked)
 	{
@@ -242,11 +242,11 @@ void just_quit_pop_cback(void *ptr, char yes)
 void volume_control_tick()
 {
 	float volper = scale_value_to(rg.music_vol, 0, 100, 0, 1);
-	float volperscmod = mouse_y < rg.win_height_mid ? 1.5 : 1;
+	float volperscmod = mouse.y < rg.win_height_mid ? 1.5 : 1;
 	if(volper > 0.0f) GL_CIRCLE(rg.win_width_mid, rg.win_height_mid - (rg.win_height / 4), (return_lowest(rg.win_width, rg.win_height) / 6) * volperscmod, 100, volper, col_red);
 
 	float effper = scale_value_to(rg.effect_vol, 0, 100, 0, 1);
-	float effperscmod = mouse_y >= rg.win_height_mid ? 1.5 : 1;
+	float effperscmod = mouse.y >= rg.win_height_mid ? 1.5 : 1;
 	if(effper > 0.0f) GL_CIRCLE(rg.win_width_mid, rg.win_height_mid + (rg.win_height / 4), (return_lowest(rg.win_width, rg.win_height) / 6) * effperscmod, 100, effper, col_cyan);
 }
 
@@ -622,7 +622,7 @@ void editor_settings_tick(struct gui_win *ptr)
 	button_update(rg.grid_res_menu_button);
 	button_render(rg.grid_res_menu_button);
 
-	if(rg.grid_res_menu_button->clicked) context_menu_activate(rg.grid_res_cmenu, mouse_x, mouse_y);
+	if(rg.grid_res_menu_button->clicked) context_menu_activate(rg.grid_res_cmenu, mouse.x, mouse.y);
 	context_menu_update(rg.grid_res_cmenu);
 	int cmgc = context_menu_get_clicked_option(rg.grid_res_cmenu);
 	if(cmgc != -1)
@@ -773,33 +773,33 @@ int main(int argc, char *argv[])
 	memset(&rg.kp, 0, KEY_COUNT * sizeof(int));
 	memset(&rg.kr, 0, KEY_COUNT * sizeof(char));
 
-	mouse_state_x = 0;
-	mouse_state_y = 0;
-	mouse_x = 0;
-	mouse_y = 0;
+	mouse.state_x = 0;
+	mouse.state_y = 0;
+	mouse.x = 0;
+	mouse.y = 0;
 	gui_mouse_x = 0;
 	gui_mouse_y = 0;
-	mouse_x_on_click = 0;
-	mouse_x_on_click_real = 0;
-	mouse_y_on_click = 0;
-	mouse_y_on_click_real = 0;
-	mouse_delta_x = 0;
-	mouse_delta_y = 0;
-	mouse_drag_delta_x = 0;
-	mouse_drag_delta_y = 0;
-	mouse_release_velocity_x = 0;
-	mouse_release_velocity_y = 0;
-	mouse_vel_slow_ms_x = 0;
-	mouse_vel_slow_ms_y = 0;
-	mouse_release_velocity_timer = timer_init();
-	mouse_inside_window = 0;
-	mouse_outside_window_during_drag = 0;
-	mouse_moved = 0;
-	mouse_dragged = 0;
+	mouse.x_on_click = 0;
+	mouse.x_on_click_real = 0;
+	mouse.y_on_click = 0;
+	mouse.y_on_click_real = 0;
+	mouse.delta_x = 0;
+	mouse.delta_y = 0;
+	mouse.drag_delta_x = 0;
+	mouse.drag_delta_y = 0;
+	mouse.release_velocity_x = 0;
+	mouse.release_velocity_y = 0;
+	mouse.vel_slow_ms_x = 0;
+	mouse.vel_slow_ms_y = 0;
+	mouse.release_velocity_timer = timer_init();
+	mouse.inside_window = 0;
+	mouse.outside_window_during_drag = 0;
+	mouse.moved = 0;
+	mouse.dragged = 0;
 
-	mouse_state_left = 0;
-	mouse_state_middle = 0;
-	mouse_state_right = 0;
+	mouse.state_left = 0;
+	mouse.state_middle = 0;
+	mouse.state_right = 0;
 	left_click = 0;
 	left_click_released = 0;
 	middle_click = 0;
@@ -809,8 +809,8 @@ int main(int argc, char *argv[])
 	left_click_held = timer_init();
 	middle_click_held = timer_init();
 	right_click_held = timer_init();
-	mouse_moved_clock = timer_init();
-	mouse_button_released = 0;
+	mouse.moved_clock = timer_init();
+	mouse.button_released = 0;
 	cursor_type = SDL_SYSTEM_CURSOR_ARROW;
 
 	rg.gui_view_scale = 1.0f;
@@ -1160,7 +1160,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		mouse_button_released = 0;
+		mouse.button_released = 0;
 
 		events();
 
@@ -1183,7 +1183,7 @@ int main(int argc, char *argv[])
 		if(rg.focus)
 		{
 			int cbt = clamp(timer_milliseconds(click_block_timer), 0, CLICK_BLOCK_TIME_MS);
-			char ccc = mouse_state_left || mouse_state_middle || mouse_state_right;
+			char ccc = mouse.state_left || mouse.state_middle || mouse.state_right;
 			char good = (!current_context_menu || (current_context_menu->activated && current_context_menu->hovered));
 
 			if(ccc && cbt < CLICK_BLOCK_TIME_MS) timer_restart(click_block_timer);
@@ -1196,7 +1196,7 @@ int main(int argc, char *argv[])
 			}
 			else if(cbt >= CLICK_BLOCK_TIME_MS)
 			{
-				if(good && mouse_state_left) left_click++;
+				if(good && mouse.state_left) left_click++;
 				else
 				{
 					if(good && left_click > 0) left_click_released = 1;
@@ -1204,7 +1204,7 @@ int main(int argc, char *argv[])
 					timer_restart(left_click_held);
 				}
 
-				if(good && mouse_state_middle) middle_click++;
+				if(good && mouse.state_middle) middle_click++;
 				else
 				{
 					if(good && middle_click > 0) middle_click_released = 1;
@@ -1212,7 +1212,7 @@ int main(int argc, char *argv[])
 					timer_restart(middle_click_held);
 				}
 
-				if(good && mouse_state_right) right_click++;
+				if(good && mouse.state_right) right_click++;
 				else
 				{
 					if(good && right_click > 0) right_click_released = 1;
@@ -1221,8 +1221,8 @@ int main(int argc, char *argv[])
 				}
 			}
 
-			if(SDL_GetMouseFocus() != NULL) mouse_inside_window = 1;
-			else mouse_inside_window = 0;
+			if(SDL_GetMouseFocus() != NULL) mouse.inside_window = 1;
+			else mouse.inside_window = 0;
 		}
 		else
 		{
@@ -1239,15 +1239,15 @@ int main(int argc, char *argv[])
 			timer_restart(right_click_held);
 		}
 
-		if(current_context_menu && mouse_button_released && !(current_context_menu->hovered)) current_context_menu->button_click_avoided = 0;
+		if(current_context_menu && mouse.button_released && !(current_context_menu->hovered)) current_context_menu->button_click_avoided = 0;
 
-		if((left_click > 0 || middle_click > 0 || right_click > 0) && !mouse_inside_window) mouse_outside_window_during_drag = 1;
-		else if(left_click + middle_click + right_click == 0) mouse_outside_window_during_drag = 0;
+		if((left_click > 0 || middle_click > 0 || right_click > 0) && !mouse.inside_window) mouse.outside_window_during_drag = 1;
+		else if(left_click + middle_click + right_click == 0) mouse.outside_window_during_drag = 0;
 
 		if(left_click == 1 || middle_click == 1 || right_click == 1)
 		{
-			mouse_x_on_click_real = mouse_state_x;
-			mouse_y_on_click_real = mouse_state_y;
+			mouse.x_on_click_real = mouse.state_x;
+			mouse.y_on_click_real = mouse.state_y;
 		}
 
 		float_rect view_rect = FLOATRECT(rg.gui_view_xoff, rg.gui_view_yoff, rg.win_width_real * rg.gui_view_scale, rg.win_height_real * rg.gui_view_scale);
@@ -1262,44 +1262,44 @@ int main(int argc, char *argv[])
 		glLoadIdentity();
 		gluOrtho2D(view_rect.left, view_rect.left + view_rect.width, view_rect.top + view_rect.height, view_rect.top);
 
-		v2f mpf = V2F(scale_value_to(mouse_state_x, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width), scale_value_to(mouse_state_y, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height));
-		mouse_delta_x = mpf.x - gui_mouse_x;
-		mouse_delta_y = mpf.y - gui_mouse_y;
-		if(mouse_delta_x != 0 || mouse_delta_y != 0) mouse_moved = 1;
-		mouse_x = mpf.x;
-		mouse_y = mpf.y;
+		v2f mpf = V2F(scale_value_to(mouse.state_x, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width), scale_value_to(mouse.state_y, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height));
+		mouse.delta_x = mpf.x - gui_mouse_x;
+		mouse.delta_y = mpf.y - gui_mouse_y;
+		if(mouse.delta_x != 0 || mouse.delta_y != 0) mouse.moved = 1;
+		mouse.x = mpf.x;
+		mouse.y = mpf.y;
 		gui_mouse_x = mpf.x;
 		gui_mouse_y = mpf.y;
 
-		mouse_x_on_click = scale_value_to(mouse_x_on_click_real, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width);
-		mouse_y_on_click = scale_value_to(mouse_y_on_click_real, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height);
+		mouse.x_on_click = scale_value_to(mouse.x_on_click_real, 0, rg.win_width_real, view_rect.left, view_rect.left + view_rect.width);
+		mouse.y_on_click = scale_value_to(mouse.y_on_click_real, 0, rg.win_height_real, view_rect.top, view_rect.top + view_rect.height);
 
 		if(left_click || middle_click || right_click)
 		{
-			mouse_drag_delta_x = mouse_x - mouse_x_on_click;
-			mouse_drag_delta_y = mouse_y - mouse_y_on_click;
+			mouse.drag_delta_x = mouse.x - mouse.x_on_click;
+			mouse.drag_delta_y = mouse.y - mouse.y_on_click;
 		}
 		else
 		{
-			mouse_drag_delta_x = 0;
-			mouse_drag_delta_y = 0;
+			mouse.drag_delta_x = 0;
+			mouse.drag_delta_y = 0;
 		}
 
-		mouse_dragged = (mouse_drag_delta_x != 0 || mouse_drag_delta_y != 0);
+		mouse.dragged = (mouse.drag_delta_x != 0 || mouse.drag_delta_y != 0);
 
 		if(left_click || middle_click || right_click)
 		{
-			mouse_release_velocity_x -= (mouse_delta_x / 2) * 0.05;
-			mouse_release_velocity_y -= (mouse_delta_y / 2) * 0.05;
+			mouse.release_velocity_x -= (mouse.delta_x / 2) * 0.05;
+			mouse.release_velocity_y -= (mouse.delta_y / 2) * 0.05;
 		}
 		else
 		{
-			mouse_vel_slow_ms_x = 0;
-			mouse_vel_slow_ms_y = 0;
+			mouse.vel_slow_ms_x = 0;
+			mouse.vel_slow_ms_y = 0;
 		}
 
-		if(mouse_delta_x == 0.0f) mouse_vel_slow_ms_x += rg.frame_delta_ms;
-		if(mouse_delta_y == 0.0f) mouse_vel_slow_ms_y += rg.frame_delta_ms;
+		if(mouse.delta_x == 0.0f) mouse.vel_slow_ms_x += rg.frame_delta_ms;
+		if(mouse.delta_y == 0.0f) mouse.vel_slow_ms_y += rg.frame_delta_ms;
 
 		online_client_tick(rg.client);
 
@@ -1448,7 +1448,7 @@ int main(int argc, char *argv[])
 			float_rect ltr;
 			char *dev_url = "https://github.com/aoeu1/aoeu_rg/";
 			text3_fmt_rect(ltr, rg.win_width, rg.win_height, rg.win_width, 255, origin_right, origin_bottom, text3_justification_right, "~u%s", dev_url);
-			char ltri = FR_CONTAINS2(ltr, mouse_x, mouse_y);
+			char ltri = FR_CONTAINS2(ltr, mouse.x, mouse.y);
 			if(ltri && left_click == 1) open_url("https://github.com/aoeu1/aoeu_rg/");
 		}
 		else if(rg.screen == screen_song_select)
@@ -1705,8 +1705,8 @@ int main(int argc, char *argv[])
 				{
 					v2f zero_pos = song_map_coord_to_play_field(rg.song, V2FZERO);
 					v2f pf_dim = song_get_playfield_dimensions(rg.song);
-					float mouse_x_on_playfield_new = scale_value_to(mouse_x - zero_pos.x, 0, pf_dim.x, 0, SONG_PFW);
-					float mouse_y_on_playfield_new = scale_value_to(mouse_y - zero_pos.y, 0, pf_dim.y, 0, SONG_PFH);
+					float mouse_x_on_playfield_new = scale_value_to(mouse.x - zero_pos.x, 0, pf_dim.x, 0, SONG_PFW);
+					float mouse_y_on_playfield_new = scale_value_to(mouse.y - zero_pos.y, 0, pf_dim.y, 0, SONG_PFH);
 					rg.mop_fdx = mouse_x_on_playfield_new - rg.mop_x;
 					rg.mop_fdy = mouse_y_on_playfield_new - rg.mop_y;
 					rg.mop_x = mouse_x_on_playfield_new;
@@ -1760,7 +1760,7 @@ int main(int argc, char *argv[])
 					(
 						rg.kp[SDL_SCANCODE_LSHIFT] == 1
 						||
-						mouse_moved
+						mouse.moved
 					)
 				)
 				{
@@ -1776,11 +1776,11 @@ int main(int argc, char *argv[])
 				(
 					rg.kp[SDL_SCANCODE_TAB]
 					&&
-					mouse_moved
+					mouse.moved
 				)
 				{
-					rg.song->raw_object_size += mouse_delta_y * 0.025;
-					rg.song->raw_approach_rate += mouse_delta_x * 0.025;
+					rg.song->raw_object_size += mouse.delta_y * 0.025;
+					rg.song->raw_approach_rate += mouse.delta_x * 0.025;
 					song_all_sliders_del_textures(rg.song);
 					rg.song->raw_object_size = clamp(rg.song->raw_object_size, SONG_MIN_RAW_OBJECT_SIZE, SONG_MAX_RAW_OBJECT_SIZE);
 					rg.song->raw_approach_rate = clamp(rg.song->raw_approach_rate, SONG_MIN_RAW_APPROACH_RATE, SONG_MAX_RAW_APPROACH_RATE);
@@ -1910,35 +1910,35 @@ int main(int argc, char *argv[])
 
 		SDL_GL_SwapWindow(rg.win);
 
-		if(mouse_button_released)
+		if(mouse.button_released)
 		{
-			mouse_release_velocity_x = 0.0f;
-			mouse_release_velocity_y = 0.0f;
+			mouse.release_velocity_x = 0.0f;
+			mouse.release_velocity_y = 0.0f;
 		}
 
 		float slowthres = 150;
-		if(mouse_vel_slow_ms_x >= slowthres)
+		if(mouse.vel_slow_ms_x >= slowthres)
 		{
-			mouse_release_velocity_x = 0.0f;
-			mouse_vel_slow_ms_x = 0;
+			mouse.release_velocity_x = 0.0f;
+			mouse.vel_slow_ms_x = 0;
 		}
-		if(mouse_vel_slow_ms_y >= slowthres)
+		if(mouse.vel_slow_ms_y >= slowthres)
 		{
-			mouse_release_velocity_y = 0.0f;
-			mouse_vel_slow_ms_y = 0;
+			mouse.release_velocity_y = 0.0f;
+			mouse.vel_slow_ms_y = 0;
 		}
 		
 		float sst = 0.04 * rg.frame_delta_ms;
 
-		if(mouse_release_velocity_y > 0)
+		if(mouse.release_velocity_y > 0)
 		{
-			mouse_release_velocity_y -= sst;
-			if(mouse_release_velocity_y < 0) mouse_release_velocity_y = 0;
+			mouse.release_velocity_y -= sst;
+			if(mouse.release_velocity_y < 0) mouse.release_velocity_y = 0;
 		}
-		else if(mouse_release_velocity_y < 0)
+		else if(mouse.release_velocity_y < 0)
 		{
-			mouse_release_velocity_y += sst;
-			if(mouse_release_velocity_y > 0) mouse_release_velocity_y = 0;
+			mouse.release_velocity_y += sst;
+			if(mouse.release_velocity_y > 0) mouse.release_velocity_y = 0;
 		}
 
 		++rg.frames;
@@ -1948,9 +1948,9 @@ int main(int argc, char *argv[])
 
 		if(rg.resized > 0) --rg.resized;
 
-		if(timer_milliseconds(mouse_release_velocity_timer) >= MOUSE_VEL_CHECK_MS) timer_restart(mouse_release_velocity_timer);
+		if(timer_milliseconds(mouse.release_velocity_timer) >= MOUSE_VEL_CHECK_MS) timer_restart(mouse.release_velocity_timer);
 
-		if(mouse_moved && timer_bool(mouse_moved_clock, MOUSE_MOVED_DECAY_MS)) mouse_moved = 0;
+		if(mouse.moved && timer_bool(mouse.moved_clock, MOUSE_MOVED_DECAY_MS)) mouse.moved = 0;
 
 		if(cursor_type == SDL_SYSTEM_CURSOR_ARROW) SDL_SetCursor(arrow_cursor);
 		if(cursor_type == SDL_SYSTEM_CURSOR_SIZEWE) SDL_SetCursor(horiz_cursor);
@@ -2068,12 +2068,12 @@ int main(int argc, char *argv[])
 
 	config_deinit();
 
-	timer_free(mouse_moved_clock);
+	timer_free(mouse.moved_clock);
 	timer_free(right_click_held);
 	timer_free(middle_click_held);
 	timer_free(left_click_held);
 
-	timer_free(mouse_release_velocity_timer);
+	timer_free(mouse.release_velocity_timer);
 
 	timer_free(fps_clock_interval);
 	timer_free(fps_clock);

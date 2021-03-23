@@ -263,12 +263,12 @@ void console_tick(console *ptr)
 	{
 		if(left_click == 1) ptr->bar->velocity = 0.0f;
 		ptr->drag_scroll = 1;
-		ptr->bar->cur_value -= mouse_delta_y * sbdh;
+		ptr->bar->cur_value -= mouse.delta_y * sbdh;
 	}
 	else if(left_click_released && ptr->drag_scroll)
 	{
 		ptr->drag_scroll = 0;
-		ptr->bar->velocity = mouse_release_velocity_y / 2;
+		ptr->bar->velocity = mouse.release_velocity_y / 2;
 	}
 
 	float rsv = scroll_bar_get_real_value(ptr->bar);

@@ -47,23 +47,23 @@ void scroll_bar_tick(scroll_bar *ptr)
 	{
 		int left_pressed = left_click;
 
-		char on_bar = mouse_x >= ptr->hr_pos.x && mouse_y >= ptr->hr_pos.y && mouse_x_on_click <= ptr->hr_pos.x + ptr->hr_size.x && mouse_y_on_click <= ptr->hr_pos.y + ptr->hr_size.y;
+		char on_bar = mouse.x >= ptr->hr_pos.x && mouse.y >= ptr->hr_pos.y && mouse.x_on_click <= ptr->hr_pos.x + ptr->hr_size.x && mouse.y_on_click <= ptr->hr_pos.y + ptr->hr_size.y;
 		if(on_bar && left_click == 1)
 		{
 			ptr->handle_clicked = 1;
-			ptr->my_on_handle = mouse_y - (ptr->hr_pos.y - SCROLL_BAR_HANDLE_PADDING);
+			ptr->my_on_handle = mouse.y - (ptr->hr_pos.y - SCROLL_BAR_HANDLE_PADDING);
 		}
 
 		if(ptr->handle_clicked && left_click_released)
 		{
-			ptr->velocity = -mouse_release_velocity_y;
+			ptr->velocity = -mouse.release_velocity_y;
 		}
 
 		ptr->vlim = (ptr->height - SCROLL_BAR_HANDLE_PADDING * 2) - ptr->hr_size.y;
 
 		if(ptr->handle_clicked && left_pressed)
 		{
-			float my_on_bar = clamp(mouse_y - (ptr->y) - ptr->my_on_handle, 0, ptr->vlim);
+			float my_on_bar = clamp(mouse.y - (ptr->y) - ptr->my_on_handle, 0, ptr->vlim);
 
 			ptr->cur_value = my_on_bar;
 		}

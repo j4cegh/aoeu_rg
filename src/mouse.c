@@ -1,31 +1,9 @@
 #include "mouse.h"
 
-float mouse_state_x;
-float mouse_state_y;
-float mouse_x;
-float mouse_y;
+mouse_data mouse;
+
 float gui_mouse_x;
 float gui_mouse_y;
-float mouse_x_on_click;
-float mouse_x_on_click_real;
-float mouse_y_on_click;
-float mouse_y_on_click_real;
-float mouse_delta_x;
-float mouse_delta_y;
-float mouse_drag_delta_x;
-float mouse_drag_delta_y;
-float mouse_release_velocity_x;
-float mouse_release_velocity_y;
-float mouse_vel_slow_ms_x;
-float mouse_vel_slow_ms_y;
-timer *mouse_release_velocity_timer;
-char mouse_inside_window;
-char mouse_outside_window_during_drag;
-char mouse_moved;
-char mouse_dragged;
-char mouse_state_left;
-char mouse_state_middle;
-char mouse_state_right;
 int left_click;
 char left_click_released;
 int middle_click;
@@ -35,6 +13,4 @@ char right_click_released;
 timer *left_click_held;
 timer *middle_click_held;
 timer *right_click_held;
-timer *mouse_moved_clock;
-char mouse_button_released;
 SDL_SystemCursor cursor_type;

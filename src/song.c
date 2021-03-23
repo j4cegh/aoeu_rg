@@ -1055,7 +1055,7 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 						obj->pos.x += sdx;
 						obj->pos.y += sdy;
 
-						if(mouse_moved || left_click == 1) slider_regenerate_texture(sl);
+						if(mouse.moved || left_click == 1) slider_regenerate_texture(sl);
 						obj->do_grid_snap = 1;
 					}
 				}
@@ -1113,7 +1113,7 @@ char song_tick_selection(song *ptr, char any_obj_hovered)
 				&&
 				left_click > 0
 				&&
-				mouse_dragged
+				mouse.dragged
 				&&
 				rg.is_mouse_on_click_op
 			);
@@ -1122,21 +1122,21 @@ char song_tick_selection(song *ptr, char any_obj_hovered)
 			song_clear_selected_objects(ptr);
 			if(left_click == 1)
 			{
-				ptr->selection_rect.left = mouse_x;
-				ptr->selection_rect.top = mouse_y;
-				ptr->selection_rect.width = mouse_x;
-				ptr->selection_rect.height = mouse_y;
+				ptr->selection_rect.left = mouse.x;
+				ptr->selection_rect.top = mouse.y;
+				ptr->selection_rect.width = mouse.x;
+				ptr->selection_rect.height = mouse.y;
 			}
 
-			ptr->selection_rect.width += mouse_delta_x;
-			ptr->selection_rect.height += mouse_delta_y;
+			ptr->selection_rect.width += mouse.delta_x;
+			ptr->selection_rect.height += mouse.delta_y;
 		}
 		else
 		{
-			ptr->selection_rect.left = mouse_x;
-			ptr->selection_rect.top = mouse_y;
-			ptr->selection_rect.width = mouse_x;
-			ptr->selection_rect.height = mouse_y;
+			ptr->selection_rect.left = mouse.x;
+			ptr->selection_rect.top = mouse.y;
+			ptr->selection_rect.width = mouse.x;
+			ptr->selection_rect.height = mouse.y;
 		}
 		
 		float_rect sel_rect = FLOATRECT(ptr->selection_rect.left, ptr->selection_rect.top, ptr->selection_rect.width - ptr->selection_rect.left, ptr->selection_rect.height - ptr->selection_rect.top);
@@ -1182,7 +1182,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 			&&
 			rg.is_mouse_on_click_op
 			&&
-			get_distf(mouse_x, mouse_y, mouse_x_on_click, mouse_y_on_click) <= 1
+			get_distf(mouse.x, mouse.y, mouse.x_on_click, mouse.y_on_click) <= 1
 			)
 			{
 				float pfw_fourth = SONG_PFW / 4;
@@ -1218,7 +1218,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 				song_clear_selected_objects(ptr);
 				song_unselect_object(ptr);
 			}
-			else if(left_click_released && get_distf(mouse_x, mouse_y, mouse_x_on_click, mouse_y_on_click) <= 1)
+			else if(left_click_released && get_distf(mouse.x, mouse.y, mouse.x_on_click, mouse.y_on_click) <= 1)
 			{
 				float div = SONG_PFW / ptr->grid_resolution;
 				float snap_x = clamp(round(rg.mop_x / div) * div, 0, SONG_PFW);

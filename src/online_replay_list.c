@@ -198,9 +198,9 @@ void online_replay_list_tick(online_replay_list *ptr, float width_lim, float x, 
 		ptr->scroll_y = 0;
 		maxh = allh;
 	}
-	char in_bounds_oc = mouse_x_on_click >= x && mouse_x_on_click <= x + width_lim && mouse_y_on_click >= y && mouse_y_on_click <= y + maxh;
-	char in_bounds = mouse_x >= x && mouse_x <= x + width_lim && mouse_y >= y && mouse_y <= y + maxh;
-	if (left_click && in_bounds_oc && rg.gui_render_end_of_frame == ptr) ptr->scroll_y -= mouse_delta_y;
+	char in_bounds_oc = mouse.x_on_click >= x && mouse.x_on_click <= x + width_lim && mouse.y_on_click >= y && mouse.y_on_click <= y + maxh;
+	char in_bounds = mouse.x >= x && mouse.x <= x + width_lim && mouse.y >= y && mouse.y <= y + maxh;
+	if (left_click && in_bounds_oc && rg.gui_render_end_of_frame == ptr) ptr->scroll_y -= mouse.delta_y;
 	list_node *n;
 	ptr->scroll_y = clamp(ptr->scroll_y, 0, allh - maxh);
 	float xo = x;
@@ -213,8 +213,8 @@ void online_replay_list_tick(online_replay_list *ptr, float width_lim, float x, 
 	{
 		online_replay_list_ent *e = n->val;
 		e->rect = FLOATRECT(xo, yo, width_lim, enth);
-		e->hovered = mouse_x >= e->rect.left && mouse_y >= e->rect.top && mouse_x <= e->rect.left + e->rect.width && mouse_y <= e->rect.top + e->rect.height && in_bounds;
-		char click_good = get_distf(mouse_x, mouse_y, mouse_x_on_click, mouse_y_on_click) == 0.0f;
+		e->hovered = mouse.x >= e->rect.left && mouse.y >= e->rect.top && mouse.x <= e->rect.left + e->rect.width && mouse.y <= e->rect.top + e->rect.height && in_bounds;
+		char click_good = get_distf(mouse.x, mouse.y, mouse.x_on_click, mouse.y_on_click) == 0.0f;
 		float a = 100;
 		color4 col = col_black;
 		if (e->hovered) col = col_white;

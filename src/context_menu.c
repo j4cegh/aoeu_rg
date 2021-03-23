@@ -121,7 +121,7 @@ void context_menu_update(context_menu *ptr)
 {
     if(ptr->activated)
     {
-        ptr->hovered = mouse_x >= ptr->pos.x && mouse_y >= ptr->pos.y && mouse_x <= ptr->pos.x + ptr->size.x && mouse_y <= ptr->pos.y + ptr->size.y;
+        ptr->hovered = mouse.x >= ptr->pos.x && mouse.y >= ptr->pos.y && mouse.x <= ptr->pos.x + ptr->size.x && mouse.y <= ptr->pos.y + ptr->size.y;
         list_node *n;
         for(n = ptr->options->start; n != NULL; n = n->next)
         {

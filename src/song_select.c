@@ -343,7 +343,7 @@ char song_select_load(song_select_entry *e)
 void song_select_load_random()
 {
 	if(ss->entries->count < 1) return;
-	srand(rg.time_open->microseconds * mouse_x * mouse_y * ss->bef_travel_y * ss->y_scroll_speed + ss->y_scroll * ss->y_max_height);
+	srand(rg.time_open->microseconds * mouse.x * mouse.y * ss->bef_travel_y * ss->y_scroll_speed + ss->y_scroll * ss->y_max_height);
 	
 	int rn = rand_num_ranged(0, ss->entries->count - 1);
 	song_select_entry *e = list_get_val_at(ss->entries, rn);
@@ -383,8 +383,8 @@ void song_select_tick()
 		}
 
 		/*
-		float mym = mouse_y - rg.whmid;
-		if(allow_hover_scroll && mouse_inside_window && left_click == 0 && !one_hovered && abs(mym) >= rg.win_height / 2.2 && rg.gui_render_end_of_frame == ss && mouse_x >= rg.win_width / 3) ss->y_scroll_speed = clamp(mym, -3, 3);
+		float mym = mouse.y - rg.whmid;
+		if(allow_hover_scroll && mouse.inside_window && left_click == 0 && !one_hovered && abs(mym) >= rg.win_height / 2.2 && rg.gui_render_end_of_frame == ss && mouse.x >= rg.win_width / 3) ss->y_scroll_speed = clamp(mym, -3, 3);
 		*/
 
 		if(rg.song->ss_entry)
@@ -416,8 +416,8 @@ void song_select_tick()
 				ss->y_scroll_speed = 0;
 				allow_hover_scroll = 0;
 			}
-			if(left_click) ss->y_scroll -= mouse_delta_y;
-			if(left_click_released) ss->y_scroll_speed = clamp(mouse_release_velocity_y, -7.0f, 7.0f);
+			if(left_click) ss->y_scroll -= mouse.delta_y;
+			if(left_click_released) ss->y_scroll_speed = clamp(mouse.release_velocity_y, -7.0f, 7.0f);
 		}
 
 		if(abs(ss->y_scroll_speed) < 0.05) allow_hover_scroll = 1;
@@ -479,20 +479,20 @@ void song_select_tick()
 			e->hovered =
 			(
 				(
-					mouse_x >= e->rect.left
+					mouse.x >= e->rect.left
 					&&
-					mouse_y >= e->rect.top
+					mouse.y >= e->rect.top
 					&&
-					mouse_x <= (e->rect.left + e->rect.width)
+					mouse.x <= (e->rect.left + e->rect.width)
 					&&
-					mouse_y <= (e->rect.top + e->rect.height)
+					mouse.y <= (e->rect.top + e->rect.height)
 
 				)
 				&&
 				rg.gui_render_end_of_frame == ss
 			);
 			if(one_hovered) e->hovered = 0;
-			if(e->should_render && e->hovered && e->hovered_oc && mouse_button_released) song_select_entry_click(e, 0);
+			if(e->should_render && e->hovered && e->hovered_oc && mouse.button_released) song_select_entry_click(e, 0);
 			float sa = rg.frame_delta_ms / 12 / SONG_SELECT_ENTRY_HEIGHT;
 			if(e->hovered)
 			{
@@ -504,17 +504,17 @@ void song_select_tick()
 			e->hovered_oc =
 			(
 				(
-					mouse_x_on_click >= e->rect.left
+					mouse.x_on_click >= e->rect.left
 					&&
-					mouse_y_on_click >= e->rect.top
+					mouse.y_on_click >= e->rect.top
 					&&
-					mouse_x_on_click <= (e->rect.left + e->rect.width)
+					mouse.x_on_click <= (e->rect.left + e->rect.width)
 					&&
-					mouse_y_on_click <= (e->rect.top + e->rect.height)
+					mouse.y_on_click <= (e->rect.top + e->rect.height)
 
 				)
 				&&
-				get_distf(mouse_x_on_click, mouse_y_on_click, mouse_x, mouse_y) <= 20.0f
+				get_distf(mouse.x_on_click, mouse.y_on_click, mouse.x, mouse.y) <= 20.0f
 				&&
 				rg.gui_render_end_of_frame == ss
 			);

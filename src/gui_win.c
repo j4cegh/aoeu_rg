@@ -87,14 +87,14 @@ void gui_win_set_title(gui_win *ptr, char *new_title)
 
 void gui_win_check_grab(gui_win *ptr)
 {
-	int mx = mouse_x;
-	int my = mouse_y;
+	int mx = mouse.x;
+	int my = mouse.y;
 
 	float x = ptr->pos.x;
 	float y = ptr->pos.y;
 
-	int relmx = mouse_x - x;
-	int relmy = mouse_y - y;
+	int relmx = mouse.x - x;
+	int relmy = mouse.y - y;
 	
 	if(relmx >= 0 && relmy >= 0 && relmx <= ptr->size.x && relmy <= ptr->size.y) gui_win_hovered = 1;
 
@@ -126,7 +126,7 @@ void gui_win_check_grab(gui_win *ptr)
 	if(ptr->is_handle_hovered && left_pressed && (ptr == gui_win_man_get_active() || ptr->not_in_win_man))
 	{
 		gui_win_is_grabbed = 1;
-		gui_win_move(ptr, mouse_x - ptr->rel_handle_mx, mouse_y - ptr->rel_handle_my);
+		gui_win_move(ptr, mouse.x - ptr->rel_handle_mx, mouse.y - ptr->rel_handle_my);
 	}
 }
 

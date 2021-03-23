@@ -558,7 +558,7 @@ void slider_update(slider *ptr)
 				}
 			}
 
-			if(mouse_moved || left_click == 1) slider_calculate_path(ptr, 0);
+			if(mouse.moved || left_click == 1) slider_calculate_path(ptr, 0);
 		}
 		else if
 		(
@@ -584,7 +584,7 @@ void slider_update(slider *ptr)
 				{
 					slider_control_point *p = (slider_control_point*)n->val;
 					v2f on_pf = song_map_coord_to_play_field(song, p->pos);
-					float dist = get_distf(mouse_x, mouse_y, on_pf.x, on_pf.y);
+					float dist = get_distf(mouse.x, mouse.y, on_pf.x, on_pf.y);
 					if(dist < dist_from_mouse)
 					{
 						dist_from_mouse = dist;
@@ -610,7 +610,7 @@ void slider_update(slider *ptr)
 					v2f on_pf = song_map_coord_to_play_field(song, p->pos);
 					v2f box_pos = V2F(on_pf.x - (box_size.x / 2), on_pf.y - (box_size.y / 2));
 
-					if(mouse_x >= box_pos.x && mouse_y >= box_pos.y && mouse_x <= box_pos.x + box_size.x && mouse_y <= box_pos.y + box_size.y)
+					if(mouse.x >= box_pos.x && mouse.y >= box_pos.y && mouse.x <= box_pos.x + box_size.x && mouse.y <= box_pos.y + box_size.y)
 					{
 						song->slider_control_point_box_hovered = 1;
 
@@ -646,7 +646,7 @@ void slider_update(slider *ptr)
 				song->selected_object = obj;
 			}
 
-			if(mouse_moved || left_click == 1)
+			if(mouse.moved || left_click == 1)
 			{
 				GLuint bef = ptr->tex;
 				slider_calculate_path(ptr, 0);

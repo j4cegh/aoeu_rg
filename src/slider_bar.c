@@ -23,20 +23,20 @@ slider_bar *slider_bar_init(char *label, float x, float y, float width, float in
 void slider_bar_update(slider_bar *ptr)
 {
     ptr->hovered =
-        mouse_x >= ptr->pos.x &&
-        mouse_x <= ptr->pos.x + ptr->bar_size.x &&
-        mouse_y >= ptr->pos.y &&
-        mouse_y <= ptr->pos.y + ptr->bar_size.y;
+        mouse.x >= ptr->pos.x &&
+        mouse.x <= ptr->pos.x + ptr->bar_size.x &&
+        mouse.y >= ptr->pos.y &&
+        mouse.y <= ptr->pos.y + ptr->bar_size.y;
     
     ptr->hovered_oc =
-        mouse_x_on_click >= ptr->pos.x &&
-        mouse_x_on_click <= ptr->pos.x + ptr->bar_size.x &&
-        mouse_y_on_click >= ptr->pos.y &&
-        mouse_y_on_click <= ptr->pos.y + ptr->bar_size.y;
+        mouse.x_on_click >= ptr->pos.x &&
+        mouse.x_on_click <= ptr->pos.x + ptr->bar_size.x &&
+        mouse.y_on_click >= ptr->pos.y &&
+        mouse.y_on_click <= ptr->pos.y + ptr->bar_size.y;
     
     if(ptr->hovered_oc && left_click)
     {
-        ptr->x_on_bar = clamp(mouse_x - ptr->pos.x, 0, ptr->bar_size.x);
+        ptr->x_on_bar = clamp(mouse.x - ptr->pos.x, 0, ptr->bar_size.x);
         ptr->val = scale_value_to(ptr->x_on_bar, 0, ptr->bar_size.x, 0, 100);
     }
 }

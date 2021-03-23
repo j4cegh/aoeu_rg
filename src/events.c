@@ -321,24 +321,24 @@ void events()
 		{
 			if(event.type == SDL_MOUSEBUTTONDOWN)
 			{
-				if(event.button.button == SDL_BUTTON_LEFT) mouse_state_left = 1;
-				if(event.button.button == SDL_BUTTON_MIDDLE) mouse_state_middle = 1;
-				if(event.button.button == SDL_BUTTON_RIGHT) mouse_state_right = 1;
+				if(event.button.button == SDL_BUTTON_LEFT) mouse.state_left = 1;
+				if(event.button.button == SDL_BUTTON_MIDDLE) mouse.state_middle = 1;
+				if(event.button.button == SDL_BUTTON_RIGHT) mouse.state_right = 1;
 			}
 			else if(event.type == SDL_MOUSEBUTTONUP)
 			{
-				if(event.button.button == SDL_BUTTON_LEFT) mouse_state_left = 0;
-				if(event.button.button == SDL_BUTTON_MIDDLE) mouse_state_middle = 0;
-				if(event.button.button == SDL_BUTTON_RIGHT) mouse_state_right = 0;
+				if(event.button.button == SDL_BUTTON_LEFT) mouse.state_left = 0;
+				if(event.button.button == SDL_BUTTON_MIDDLE) mouse.state_middle = 0;
+				if(event.button.button == SDL_BUTTON_RIGHT) mouse.state_right = 0;
 			}
 
 			if(event.type == SDL_MOUSEMOTION)
 			{
-				mouse_state_x = event.motion.x - 1;
-				mouse_state_y = event.motion.y - 1;
+				mouse.state_x = event.motion.x - 1;
+				mouse.state_y = event.motion.y - 1;
 			}
 
-			if(event.type == SDL_MOUSEBUTTONUP) mouse_button_released = 1;
+			if(event.type == SDL_MOUSEBUTTONUP) mouse.button_released = 1;
 #ifndef RELEASE
 			if(event.type == SDL_MOUSEMOTION && rg.kp[SDL_SCANCODE_LCTRL] && rg.kp[SDL_SCANCODE_LALT])
 			{

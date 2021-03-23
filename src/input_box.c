@@ -114,7 +114,7 @@ void input_box_sel_all(input_box *ptr)
 void input_box_events(input_box *ptr, SDL_Event e)
 {
 	int key = e.key.keysym.sym;
-	if(key == SDLK_MENU) context_menu_activate(ptr->menu, mouse_x, mouse_y);
+	if(key == SDLK_MENU) context_menu_activate(ptr->menu, mouse.x, mouse.y);
 	if(key == SDLK_BACKSPACE) input_box_backspace(current_input_box, 0);
 	if(key == SDLK_DELETE) input_box_backspace(current_input_box, 1);
 	if(key == SDLK_ESCAPE && !cons_ptr->is_animating && !rg.global_popup->is_opened)
@@ -275,13 +275,13 @@ int get_char_index_closest_to_mouse(input_box *ptr, char mouse_coords_at_start_o
 
 	if(mouse_coords_at_start_of_click)
 	{
-		mouse_x_on_box = mouse_x_on_click - ptr->pos.x + ptr->xoff;
-		mouse_y_on_box = mouse_y_on_click - ptr->pos.y;
+		mouse_x_on_box = mouse.x_on_click - ptr->pos.x + ptr->xoff;
+		mouse_y_on_box = mouse.y_on_click - ptr->pos.y;
 	}
 	else
 	{
-		mouse_x_on_box = mouse_x - ptr->pos.x + ptr->xoff;
-		mouse_y_on_box = mouse_y - ptr->pos.y;
+		mouse_x_on_box = mouse.x - ptr->pos.x + ptr->xoff;
+		mouse_y_on_box = mouse.y - ptr->pos.y;
 	}
 
 
@@ -315,9 +315,9 @@ void input_box_update(input_box *ptr)
 	}
 
 	float_rect rect = FLOATRECT(ptr->pos.x, ptr->pos.y, ptr->size.x, ptr->size.y);
-	char inside = mouse_x >= ptr->pos.x && mouse_y >= ptr->pos.y && mouse_x <= ptr->pos.x + rect.width && mouse_y <= ptr->pos.y + rect.height;
-	char oc_inside = mouse_x_on_click >= ptr->pos.x && mouse_y_on_click >= ptr->pos.y && mouse_x_on_click <= ptr->pos.x + rect.width && mouse_y_on_click <= ptr->pos.y + rect.height;
-	if(mouse_y < 0) inside = 0;
+	char inside = mouse.x >= ptr->pos.x && mouse.y >= ptr->pos.y && mouse.x <= ptr->pos.x + rect.width && mouse.y <= ptr->pos.y + rect.height;
+	char oc_inside = mouse.x_on_click >= ptr->pos.x && mouse.y_on_click >= ptr->pos.y && mouse.x_on_click <= ptr->pos.x + rect.width && mouse.y_on_click <= ptr->pos.y + rect.height;
+	if(mouse.y < 0) inside = 0;
 	if(inside && (left_click == 1) && !cons_ptr->activated && !cons_ptr->is_animating && (ptr == rg.gui_render_end_of_frame) && !current_context_menu)
 	{
 		current_input_box = ptr;
@@ -359,7 +359,7 @@ void input_box_update(input_box *ptr)
 		ptr->is_selecting_with_mouse = 1;
 		if(ptr->text_ptr->size.x > ptr->size.x)
 		{
-			int mouse_x_on_box = mouse_x - ptr->pos.x;
+			int mouse_x_on_box = mouse.x - ptr->pos.x;
 			if(mouse_x_on_box <= 0) ptr->xoff -= 0.5;
 			if(mouse_x_on_box >= ptr->size.x) ptr->xoff += 0.5;
 			ptr->xoff = clamp(ptr->xoff, 0, ptr->text_ptr->size.x - ptr->size.x);
@@ -375,7 +375,7 @@ void input_box_update(input_box *ptr)
 			input_box_reset_selection(ptr);
 			ptr->is_selecting_with_mouse = 1;
 		}
-		context_menu_activate(ptr->menu, mouse_x, mouse_y);
+		context_menu_activate(ptr->menu, mouse.x, mouse.y);
 	}
 
 	context_menu_update(ptr->menu);
@@ -455,7 +455,7 @@ void input_box_render(input_box *ptr)
 	if(!ptr->is_inside_ezgui) glDisable(GL_SCISSOR_TEST);
 	else glPopAttrib();
 	
-	char inside = mouse_x >= ptr->pos.x && mouse_y >= ptr->pos.y && mouse_x <= ptr->pos.x + ptr->size.x && mouse_y <= ptr->pos.y + ptr->size.y;
+	char inside = mouse.x >= ptr->pos.x && mouse.y >= ptr->pos.y && mouse.x <= ptr->pos.x + ptr->size.x && mouse.y <= ptr->pos.y + ptr->size.y;
 	if(inside) rg.gui_render_ptr = ptr;
 	float_rect bounds = FLOATRECT(ptr->pos.x, ptr->pos.y, ptr->pos.x + ptr->size.x, ptr->pos.y + ptr->size.y);
 }

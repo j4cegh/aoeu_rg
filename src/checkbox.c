@@ -42,21 +42,21 @@ void checkbox_update(checkbox *ptr)
 
 	ptr->hovered = 
 		(
-			mouse_x >= ptr->pos.x
+			mouse.x >= ptr->pos.x
 			&&
-			mouse_x <= ptr->pos.x + ptr->size.x
+			mouse.x <= ptr->pos.x + ptr->size.x
 			&&
-			mouse_y >= ptr->pos.y
+			mouse.y >= ptr->pos.y
 			&&
-			mouse_y <= ptr->pos.y + ptr->size.y
+			mouse.y <= ptr->pos.y + ptr->size.y
 			&&
-			mouse_x_on_click >= ptr->pos.x
+			mouse.x_on_click >= ptr->pos.x
 			&&
-			mouse_x_on_click <= ptr->pos.x + ptr->size.x
+			mouse.x_on_click <= ptr->pos.x + ptr->size.x
 			&&
-			mouse_y_on_click >= ptr->pos.y
+			mouse.y_on_click >= ptr->pos.y
 			&&
-			mouse_y_on_click <= ptr->pos.y + ptr->size.y
+			mouse.y_on_click <= ptr->pos.y + ptr->size.y
 		);
 
 	if(ptr->hovered) rg.gui_render_ptr = ptr;
