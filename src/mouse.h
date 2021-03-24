@@ -1,7 +1,9 @@
 #pragma once
 
 #include "timer.h"
+#include "rect.h"
 #include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_events.h>
 
 typedef struct mouse_data
 {
@@ -10,9 +12,7 @@ typedef struct mouse_data
 	float x;
 	float y;
 	float x_on_click;
-	float x_on_click_real;
 	float y_on_click;
-	float y_on_click_real;
 	float delta_x;
 	float delta_y;
 	float drag_delta_x;
@@ -32,8 +32,6 @@ typedef struct mouse_data
 	timer *moved_clock;
 	char button_released;
 	SDL_SystemCursor cursor_type;
-	float gui_x;
-	float gui_y;
 	timer *left_click_held;
 	timer *middle_click_held;
 	timer *right_click_held;
@@ -46,3 +44,9 @@ typedef struct mouse_data
 } mouse_data;
 
 extern mouse_data mouse;
+
+void mouse_init();
+void mouse_new_frame();
+void mouse_events(SDL_Event event);
+void mouse_update();
+void mouse_free();

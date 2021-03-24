@@ -71,7 +71,7 @@ void timeline_tick(timeline *tl, struct song *song)
 			v2f sc = V2F(timeline_circle_scale * obj_scale_modifier, timeline_circle_scale * obj_scale_modifier);
 
 			float radius = obj_radius * sc.x;
-			float rend_dist = obj->length_time_ms > 0 ? (rg.win_width + obj->length_time_ms) * rg.gui_view_scale : rg.win_width_mid;
+			float rend_dist = obj->length_time_ms > 0 ? (rg.win_width + obj->length_time_ms) : rg.win_width_mid;
 			if
 			(
 				obj->relative_time_ms >= -((rend_dist + (obj_radius / 2)) / timeline_scale)
@@ -153,7 +153,7 @@ void timeline_tick(timeline *tl, struct song *song)
 		for(obn = song->game_mode_objects->end; obn != NULL; obn = obn->before)
 		{
 			object *obj = obn->val;
-			float rend_dist = obj->length_time_ms > 0 ? (rg.win_width + obj->length_time_ms) * rg.gui_view_scale : rg.win_width_mid;
+			float rend_dist = obj->length_time_ms > 0 ? (rg.win_width + obj->length_time_ms) : rg.win_width_mid;
 			if
 			(
 				obj->relative_time_ms >= -((rend_dist + (obj_radius / 2)) / timeline_scale)

@@ -83,7 +83,6 @@ typedef struct vars
 	unsigned long long int focus_frames;
 
 	/* gui view */
-	float gui_view_scale;
 	float gui_view_xoff;
 	float gui_view_yoff;
 

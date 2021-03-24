@@ -69,10 +69,10 @@ glEnd(); \
 
 #define GL_SCISSOR(rect) \
 glScissor( \
-    (rect.left - rg.gui_view_xoff) / rg.gui_view_scale, \
-    (rg.win_height / rg.gui_view_scale) - ((rect.top + rect.height - rg.gui_view_yoff) / rg.gui_view_scale), \
-    rect.width / rg.gui_view_scale, \
-    rect.height / rg.gui_view_scale \
+    rect.left - rg.gui_view_xoff, \
+    rg.win_height - ((rect.top + rect.height - rg.gui_view_yoff)), \
+    rect.width, \
+    rect.height \
 );
 
 #define GL_SCISSOR_COORDS(x, y, width, height) GL_SCISSOR(FLOATRECT(x, y, width, height))

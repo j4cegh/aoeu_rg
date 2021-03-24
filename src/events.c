@@ -319,33 +319,26 @@ void events()
 		
 		if(rg.focus)
 		{
-			if(event.type == SDL_MOUSEBUTTONDOWN)
-			{
-				if(event.button.button == SDL_BUTTON_LEFT) mouse.state_left = 1;
-				if(event.button.button == SDL_BUTTON_MIDDLE) mouse.state_middle = 1;
-				if(event.button.button == SDL_BUTTON_RIGHT) mouse.state_right = 1;
-			}
-			else if(event.type == SDL_MOUSEBUTTONUP)
-			{
-				if(event.button.button == SDL_BUTTON_LEFT) mouse.state_left = 0;
-				if(event.button.button == SDL_BUTTON_MIDDLE) mouse.state_middle = 0;
-				if(event.button.button == SDL_BUTTON_RIGHT) mouse.state_right = 0;
-			}
+			mouse_events(event);
 
-			if(event.type == SDL_MOUSEMOTION)
-			{
-				mouse.state_x = event.motion.x - 1;
-				mouse.state_y = event.motion.y - 1;
-			}
-
-			if(event.type == SDL_MOUSEBUTTONUP) mouse.button_released = 1;
 #ifndef RELEASE
 			if(event.type == SDL_MOUSEMOTION && rg.kp[SDL_SCANCODE_LCTRL] && rg.kp[SDL_SCANCODE_LALT])
 			{
-				rg.gui_view_xoff -= (event.motion.xrel * rg.gui_view_scale);
-				rg.gui_view_yoff -= (event.motion.yrel * rg.gui_view_scale);
+				rg.gui_view_xoff -= event.motion.xrel;
+				rg.gui_view_yoff -= event.motion.yrel;
 			}
 #endif
+
+			if(event.type == SDL_MOUSEWHEEL)
+			{
+				int dist = event.wheel.y;
+				if(current_scroll_bar)
+				{
+					scroll_bar *sbc = current_scroll_bar;
+					sbc->velocity += -(dist * (sbc->hr_size.y / 100));
+				}
+			}
+
 			if(event.type == SDL_KEYDOWN)
 			{
 				int key = event.key.keysym.sym;
@@ -375,26 +368,6 @@ void events()
 					char selall = (current_input_box->char_select_index_start == 0 && current_input_box->char_select_index_end == strlen(current_input_box->text));
 					char good = current_input_box->force_numbers_only ? key_good_only_nums && !(key == 46 && period_count == 1 && !selall) && !(key == 45 && (dash_count == 1 || current_input_box->caret_index > 0) && !selall) : key_good;
 					if(good) input_box_append_char(current_input_box, key);
-				}
-			}
-
-			if(event.type == SDL_MOUSEWHEEL)
-			{
-				int dist = event.wheel.y;
-#ifndef RELEASE
-				if(rg.kp[SDL_SCANCODE_LCTRL] && rg.kp[SDL_SCANCODE_LSHIFT])
-				{
-					float amount = -(dist * 0.1f);
-					rg.gui_view_scale += amount;
-					rg.gui_view_scale = clamp(rg.gui_view_scale, 0.1f, 1.5f);
-					rg.resized = 1;
-				}
-				else
-#endif
-				if(current_scroll_bar)
-				{
-					scroll_bar *sbc = current_scroll_bar;
-					sbc->velocity += -(dist * (sbc->hr_size.y / 100));
 				}
 			}
 
