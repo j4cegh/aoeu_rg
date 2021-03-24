@@ -10,6 +10,7 @@
 #include <math.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <sodium.h>
 #ifndef S_ISDIR
 #define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
 #endif
@@ -638,72 +639,6 @@ int copy_file_to(const char *source, const char *destination)
 #endif
 }
 /* file handling end */
-
-/* encryption start */
-#ifdef FORCE_TWEETNACL
-#include "tweetnacl.h"
-#else
-#include <sodium.h>
-#endif
-unsigned char *enc_msg(char *msg, unsigned char rec_pk[PUB_KEY_LEN], unsigned char your_sk[PRIV_KEY_LEN], int *retsize)
-{
-	unsigned char nonce[NONCE_LEN] = { 0 };
-	randombytes(nonce, NONCE_LEN);
-	int msg_len = strlen(msg);
-	int padded_msg_len = msg_len + PADDING_LEN;
-	/*unsigned char padded_msg[padded_msg_len];*/
-	unsigned char *padded_msg = malloc(padded_msg_len);
-
-	memset(padded_msg, 0, PADDING_LEN);
-	memcpy(padded_msg + PADDING_LEN, msg, msg_len);
-	/*unsigned char cipher_text[padded_msg_len];*/
-	unsigned char *cipher_text = malloc(padded_msg_len);
-	int cbr = crypto_box(cipher_text, padded_msg, padded_msg_len, nonce, rec_pk, your_sk);
-	if(cbr != 0) return dupe_str("");
-	int rs = NONCE_LEN + padded_msg_len;
-	unsigned char *ret = malloc(rs);
-	memcpy(ret, nonce, NONCE_LEN);
-	memcpy(ret + NONCE_LEN, cipher_text, padded_msg_len);
-	(*retsize) = rs;
-	free(cipher_text);
-	free(padded_msg);
-	return ret;
-}
-
-char *dec_msg(unsigned char *encrypted, int encrypted_size, unsigned char sender_pk[PUB_KEY_LEN], unsigned char your_sk[PRIV_KEY_LEN])
-{
-	unsigned char nonce[NONCE_LEN] = { 0 };
-	memcpy(nonce, encrypted, NONCE_LEN);
-	unsigned char *cipher_text = encrypted + NONCE_LEN;
-	int decs = (encrypted_size - NONCE_LEN);
-	/*unsigned char decrypted[decs];*/
-	unsigned char *decrypted = malloc(decs);
-	int cbor = crypto_box_open(decrypted, cipher_text, decs, nonce, sender_pk, your_sk);
-	if(cbor != 0) return dupe_str("");
-	int rl = (decs - PADDING_LEN);
-	char *ret = malloc(rl + 1);
-	ret[rl] = '\0';
-	memcpy(ret, decrypted + PADDING_LEN, rl);
-	free(decrypted);
-	return ret;
-}
-
-void crypto_test(char *msg)
-{
-	unsigned char sk[PRIV_KEY_LEN] = { 0 };
-	unsigned char pk[PUB_KEY_LEN] = { 0 };
-	unsigned char sk2[PRIV_KEY_LEN] = { 0 };
-	unsigned char pk2[PUB_KEY_LEN] = { 0 };
-	crypto_box_keypair(pk, sk);
-	crypto_box_keypair(pk2, sk2);
-	int ems;
-	unsigned char *em = enc_msg(msg, pk2, sk, &ems);
-	char *dm = dec_msg(em, ems, pk, sk2);
-	printf("%s\n", dm);
-	free(dm);
-	free(em);
-}
-/* encryption end */
 
 /* perf timing start */
 #ifndef RELEASE

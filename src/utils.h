@@ -62,15 +62,6 @@ long file_get_size(char *filename);
 int make_dir(char *dir);
 int copy_file_to(const char *source, const char *destination);
 
-/* encryption */
-#define PUB_KEY_LEN 32
-#define PRIV_KEY_LEN 32
-#define NONCE_LEN 24
-#define PADDING_LEN 32
-unsigned char *enc_msg(char *msg, unsigned char rec_pk[PUB_KEY_LEN], unsigned char your_sk[PRIV_KEY_LEN], int *retsize);
-char *dec_msg(unsigned char *encrypted, int encrypted_size, unsigned char sender_pk[PUB_KEY_LEN], unsigned char your_sk[PRIV_KEY_LEN]);
-void crypto_test(char *msg);
-
 /* perf timing */
 void perf_timer_start();
 void perf_timer_end(char *name);
