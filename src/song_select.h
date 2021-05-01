@@ -7,6 +7,7 @@
 #define SONG_SELECT_ENTRY_WIDTH 600
 #define SONG_SELECT_ENTRY_HEIGHT 100
 #define SONG_SELECT_ENTRY_PADDING -10
+#define SONG_SELECT_FLASH_TIME 500
 
 typedef struct song_select_entry
 {
@@ -34,7 +35,8 @@ typedef struct song_select
 	float y_scroll;
 	float y_scroll_speed;
 	float y_max_height;
-	timer *scroll_clock, *scan_clock;
+	timer *scroll_clock, *scan_clock, *click_flash_clock;
+	char first_click_flash;
 	song_select_entry *load_next;
 	struct text *no_songs_text;
 	int last_song_count;

@@ -53,7 +53,8 @@ void song_select_entry_click(song_select_entry* ptr, char enter)
 		song_select_load(ptr);
 		song_preview_play(rg.song);
 		online_replay_list_reload(ss->orl);
-		timer_restart(rg.fade_clock);
+		ss->first_click_flash = 0;
+		timer_restart(ss->click_flash_clock);
 	}
 	else
 	{
@@ -91,6 +92,8 @@ void song_select_init()
 
 	ss->scroll_clock = timer_init();
 	ss->scan_clock = timer_init();
+	ss->click_flash_clock = timer_init();
+	ss->first_click_flash = 1;
 	ss->load_next = NULL;
 
 	ss->last_song_count = song_select_count_songs_in_folder();
@@ -396,7 +399,8 @@ void song_select_tick()
 				float to = enty - ((SONG_SELECT_ENTRY_HEIGHT + (SONG_SELECT_ENTRY_PADDING * 2)) / 2);
 				float bef = ss->bef_travel_y;
 				float spd = abs((ny - to) / 100);
-				if(spd < 1) spd = 1;
+				float minspd = 0.5;
+				if(spd < minspd) spd = minspd;
 				ss->y_scroll_speed = (ny < to ? spd : -spd);
 				if((bef < enty && ny > to) || (bef > enty && ny < to))
 				{
@@ -549,5 +553,19 @@ void song_select_tick()
 		}
 
 		online_replay_list_tick(ss->orl, 300, 0, rg.win_height * 0.25 * 0.5);
+
+		if(!ss->first_click_flash)
+		{
+			float flash_ms = timer_milliseconds(ss->click_flash_clock);
+			float flash_brightness = 200;
+			float cflash_ms = clamp(flash_ms, 0, SONG_SELECT_FLASH_TIME);
+			color4 col = color4_gen_alpha(flash_brightness, flash_brightness, flash_brightness, scale_value_to(cflash_ms, 0, SONG_SELECT_FLASH_TIME, 255, 0));
+			if(flash_ms < SONG_SELECT_FLASH_TIME)
+			{
+				GL_RECT2BOX(FLOATRECT(0, 0, rg.win_width, rg.win_height), col);
+				float flash_mus_vol = scale_value_to(cflash_ms, 0, SONG_SELECT_FLASH_TIME, 0, rg.music_vol * (rg.master_vol / 100));
+				song_set_music_vol(rg.song, flash_mus_vol);
+			}
+		}
 	}
 }

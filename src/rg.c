@@ -227,6 +227,7 @@ void render_change_mode_button(float x, float y)
 
 void apply_volume()
 {
+	if(rg.screen == screen_song_select && timer_milliseconds(ss->click_flash_clock) <= SONG_SELECT_FLASH_TIME) return;
 	float m_master_vol = (rg.master_vol / 100) * clamp(1.0f - clamped_scale_value_to(rg.fade_alpha, 0.0f, 255.0f, 0.0f, 1.0f), 0.15f, 1.0f);
 	float m_music_vol = rg.music_vol * m_master_vol;
 	float m_effect_vol = rg.effect_vol * m_master_vol;
@@ -281,7 +282,7 @@ void tick_fade()
 	float ffade = scale_value_to(fadec, 0, fade_ms, 0, 255);
 	if(rg.fade_state == fade_out) rg.fade_alpha = ffade;
 	else rg.fade_alpha = 255 - ffade;
-	color4 col = rg.screen == screen_song_select ? color4_gen_alpha(0, 0, 0, rg.fade_alpha) : color4_gen_alpha(0, 0, 0, rg.fade_alpha);
+	color4 col = color4_gen_alpha(0, 0, 0, rg.fade_alpha);
 
 	if(fade_ms > 1) GL_RECT2BOX(FLOATRECT(0, 0, rg.win_width, rg.win_height), col);
 	if(rg.fade_state != fade_done)
