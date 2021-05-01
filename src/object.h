@@ -27,7 +27,8 @@ typedef enum judgement
 
 typedef struct object
 {
-    v2f pos;
+    v2f real_pos;
+	v2f render_pos;
     object_type type;
     TIME_VAR relative_time_ms;
     TIME_VAR start_time_ms;

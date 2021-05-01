@@ -24,7 +24,7 @@ char circle_check_hovered(circle *ptr)
 {
     object *obj = ptr->host_obj;
     song *song = obj->host_song;
-    v2f obj_pos_mapped = song_map_coord_to_play_field(song, obj->pos);
+    v2f obj_pos_mapped = song_map_coord_to_play_field(song, obj->real_pos);
     v2f mouse_mapped = song_map_coord_to_play_field(song, V2F(rg.mop_x, rg.mop_y));
     float mouse_to_obj_dist = get_distf(obj_pos_mapped.x, obj_pos_mapped.y, mouse_mapped.x, mouse_mapped.y);
     obj->hovered = (mouse_to_obj_dist <= (CIRCLE_RADIUS * song->object_size));
@@ -61,10 +61,10 @@ void circle_snap_to_grid(circle *ptr)
     if(obj->do_grid_snap == 1 && song->grid_resolution != SONG_PFW)
     {
         float div = SONG_PFW / song->grid_resolution;
-        float sox = round((obj->pos.x) / div) * div;
-        float soy = round((obj->pos.y) / div) * div;
-        ptr->host_obj->pos.x = sox;
-        ptr->host_obj->pos.y = soy;
+        float sox = round((obj->real_pos.x) / div) * div;
+        float soy = round((obj->real_pos.y) / div) * div;
+        ptr->host_obj->real_pos.x = sox;
+        ptr->host_obj->real_pos.y = soy;
         obj->do_grid_snap = 0;
     }
 }
@@ -78,7 +78,7 @@ void circle_render(circle *ptr)
     TIME_VAR hitreltime = obj->hit_time_ms_rel;
     judgement result = obj->start_judgement;
     
-    v2f pos = song_map_coord_to_play_field(song, obj->pos);
+    v2f pos = song_map_coord_to_play_field(song, obj->real_pos);
     pos.x += obj->wiggle_xoff;
 
     float exp_sc = 1.0f;

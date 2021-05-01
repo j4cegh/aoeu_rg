@@ -15,7 +15,8 @@
 object *object_init(OBJECT_INIT_ARGS)
 {
     object *ret = malloc(sizeof *ret);
-    ret->pos = V2F(x, y);
+    ret->real_pos = V2F(x, y);
+	ret->render_pos = V2F(x, y);
     ret->type = type;
     ret->relative_time_ms = 0;
     ret->start_time_ms = start_time_ms;
@@ -220,7 +221,7 @@ void object_update(object *ptr)
         ptr->hit_time_ms_rel = reltime;
         if(ptr->type == object_circle || ptr->type == object_mania_note) ptr->end_judgement = ptr->start_judgement;
         song_break_combo(song);
-        if(rg.screen != screen_editor && ptr->type != object_slider) list_push_back(song->explosions, explosion_init_jdgmnt(ptr->pos, song, curtime, judgement_miss));
+        if(rg.screen != screen_editor && ptr->type != object_slider) list_push_back(song->explosions, explosion_init_jdgmnt(ptr->real_pos, song, curtime, judgement_miss));
         song->passed_segs++;
     }
 
@@ -397,8 +398,8 @@ char *object_serialize(object *ptr)
             "%s"
             OBJECT_SERIALIZED_SEP
             "%d",
-            ptr->pos.x,
-            ptr->pos.y,
+            ptr->real_pos.x,
+            ptr->real_pos.y,
             ptr->type,
             ptr->start_time_ms,
             ptr->length_time_ms,
@@ -425,8 +426,8 @@ char *object_serialize(object *ptr)
             "%s"
             OBJECT_SERIALIZED_SEP
             "%d",
-            ptr->pos.x,
-            ptr->pos.y,
+            ptr->real_pos.x,
+            ptr->real_pos.y,
             ptr->type,
             ptr->start_time_ms,
             ptr->length_time_ms,
@@ -450,8 +451,8 @@ char *object_serialize(object *ptr)
             "%.2f"
             OBJECT_SERIALIZED_SEP
             "%d",
-            ptr->pos.x,
-            ptr->pos.y,
+            ptr->real_pos.x,
+            ptr->real_pos.y,
             ptr->type,
             ptr->start_time_ms,
             ptr->length_time_ms,
@@ -480,12 +481,12 @@ void object_overwrite(object *ptr, char *serialized_data)
             {
                 case 0:
                 {
-                    ptr->pos.x = atof(r);
+                    ptr->real_pos.x = atof(r);
                     break;
                 }
                 case 1:
                 {
-                    ptr->pos.y = atof(r);
+                    ptr->real_pos.y = atof(r);
                     break;
                 }
                 case 2:
@@ -558,7 +559,7 @@ judgement object_judge(object *ptr)
     TIME_VAR miss_time = MISS_TIME;
     if(ptr->hit_time_ms_rel >= -miss_time && ptr->hit_time_ms_rel <= miss_time) ret = judgement_perfect;
     if(ptr->circle != NULL && rg.screen != screen_editor && ret == judgement_miss)
-        list_push_back(ptr->host_song->explosions, explosion_init_jdgmnt(ptr->pos, ptr->host_song, ptr->host_song->current_time_ms, judgement_miss));
+        list_push_back(ptr->host_song->explosions, explosion_init_jdgmnt(ptr->real_pos, ptr->host_song, ptr->host_song->current_time_ms, judgement_miss));
     return ret;
 }
 

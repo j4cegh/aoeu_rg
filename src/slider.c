@@ -641,7 +641,7 @@ void slider_update(slider *ptr)
 				float div = SONG_PFW / song->grid_resolution;
 				ptr->selected_control_point->pos.x = round(rg.mop_x / div) * div;
 				ptr->selected_control_point->pos.y = round(rg.mop_y / div) * div;
-				if(ptr->tex == 0 && ptr->control_points->count >= 1) obj->pos = (*((slider_control_point*) list_get_val_at(ptr->control_points, 0))).pos;
+				if(ptr->tex == 0 && ptr->control_points->count >= 1) obj->real_pos = (*((slider_control_point*) list_get_val_at(ptr->control_points, 0))).pos;
 				song->slider_control_point_box_hovered = 1;
 				song->selected_object = obj;
 			}
@@ -796,8 +796,8 @@ void slider_calculate_path(slider *ptr, char dont_regen_texture)
 		if(ptr->curve_points->count >= 1)
 		{
 			v2f *first = list_get_val_at(ptr->curve_points, 0);
-			obj->pos.x = first->x;
-			obj->pos.y = first->y;
+			obj->real_pos.x = first->x;
+			obj->real_pos.y = first->y;
 		}
 
 		obj->length_time_ms = (len_ms * (1 + ptr->reverses)) * tsec->slider_time_pixel_ratio;

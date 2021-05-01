@@ -282,7 +282,7 @@ void song_stack_objects(song *ptr)
 				{
 					object *obj = n->val;
 					object *bef_obj = n->before->val;
-					float dist = get_distf(obj->pos.x, obj->pos.y, bef_obj->pos.x, bef_obj->pos.y);
+					float dist = get_distf(obj->real_pos.x, obj->real_pos.y, bef_obj->real_pos.x, bef_obj->real_pos.y);
 					if(dist <= CIRCLE_RADIUS / 4)
 					{
 						
@@ -336,8 +336,8 @@ void song_paste(song *ptr)
 			{
 				if(ofs->type == object_circle)
 				{
-					if(ptr->paste_flip_mode == 3 || ptr->paste_flip_mode == 1) ofs->pos.x = SONG_PFW - ofs->pos.x;
-					if(ptr->paste_flip_mode == 3 || ptr->paste_flip_mode == 2) ofs->pos.y = SONG_PFH - ofs->pos.y;
+					if(ptr->paste_flip_mode == 3 || ptr->paste_flip_mode == 1) ofs->real_pos.x = SONG_PFW - ofs->real_pos.x;
+					if(ptr->paste_flip_mode == 3 || ptr->paste_flip_mode == 2) ofs->real_pos.y = SONG_PFH - ofs->real_pos.y;
 				}
 				else if(ofs->type == object_slider)
 				{
@@ -854,8 +854,8 @@ void song_tick_bot(song *ptr)
 					double val = (time * ((2.0f * PI_NUM) / (360))) - (PI_NUM / 2);
 					int radius = CIRCLE_RADIUS / 2;
 					int area = radius / 2;
-					rg.mouse_x_bot = before_next_to_be_clicked->pos.x + (area * cos(val));
-					rg.mouse_y_bot = before_next_to_be_clicked->pos.y + (area * sin(val));
+					rg.mouse_x_bot = before_next_to_be_clicked->real_pos.x + (area * cos(val));
+					rg.mouse_y_bot = before_next_to_be_clicked->real_pos.y + (area * sin(val));
 					bntbcsms = before_next_to_be_clicked->start_time_ms + before_next_to_be_clicked->length_time_ms;
 					on_long = before_next_to_be_clicked->start_judgement != judgement_unknown && ptr->current_time_ms <= bntbcsms;
 					if(rg.screen == screen_player && rg.bot_enabled)
@@ -866,8 +866,8 @@ void song_tick_bot(song *ptr)
 				}
 				else
 				{
-					bntbcx = before_next_to_be_clicked->pos.x;
-					bntbcy = before_next_to_be_clicked->pos.y;
+					bntbcx = before_next_to_be_clicked->real_pos.x;
+					bntbcy = before_next_to_be_clicked->real_pos.y;
 					bntbcsms = before_next_to_be_clicked->start_time_ms;
 				}
 			}
@@ -881,8 +881,8 @@ void song_tick_bot(song *ptr)
 			}
 			if(next_to_be_clicked != NULL)
 			{
-				ntbcx = next_to_be_clicked->pos.x;
-				ntbcy = next_to_be_clicked->pos.y;
+				ntbcx = next_to_be_clicked->real_pos.x;
+				ntbcy = next_to_be_clicked->real_pos.y;
 				ntbcsms = next_to_be_clicked->start_time_ms;
 			}
 
@@ -996,8 +996,8 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 								p->y += sdy;
 							}
 
-							selno->slider->host_obj->pos.x += sdx;
-							selno->slider->host_obj->pos.y += sdy;
+							selno->slider->host_obj->real_pos.x += sdx;
+							selno->slider->host_obj->real_pos.y += sdy;
 							
 							slider_regenerate_texture(selno->slider);
 
@@ -1006,8 +1006,8 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 					}
 					else if(selno->type == object_circle)
 					{
-						selno->pos.x += rg.mop_fdx;
-						selno->pos.y += rg.mop_fdy;
+						selno->real_pos.x += rg.mop_fdx;
+						selno->real_pos.y += rg.mop_fdy;
 						selno->do_grid_snap = 1;
 					}
 				}	
@@ -1026,8 +1026,8 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 				object_type type = ptr->selected_object->type;
 				if(type == object_circle)
 				{
-					obj->pos.x += rg.mop_fdx;
-					obj->pos.y += rg.mop_fdy;
+					obj->real_pos.x += rg.mop_fdx;
+					obj->real_pos.y += rg.mop_fdy;
 					obj->do_grid_snap = 1;
 				}
 				else if(type == object_slider)
@@ -1052,8 +1052,8 @@ void song_tick_object_move(song *ptr, char any_obj_hovered, char any_selected_ob
 							p->y += sdy;
 						}
 
-						obj->pos.x += sdx;
-						obj->pos.y += sdy;
+						obj->real_pos.x += sdx;
+						obj->real_pos.y += sdy;
 
 						if(mouse.moved || mouse.left_click == 1) slider_regenerate_texture(sl);
 						obj->do_grid_snap = 1;
@@ -1077,7 +1077,7 @@ void song_render_sels(song *ptr)
 			else if(selno->type == object_circle)
 			{
 				float r = CIRCLE_RADIUS * ptr->object_size;
-				v2f pop = song_map_coord_to_play_field(ptr, selno->pos);
+				v2f pop = song_map_coord_to_play_field(ptr, selno->real_pos);
 				bounds.left = pop.x - r;
 				bounds.width = pop.x + r;
 				bounds.top = pop.y - r;
@@ -1276,7 +1276,7 @@ void song_tick_obj_editor_input(song *ptr, char selecting, char any_selected_obj
 					if(selecting)
 					{
 						char add = 0;
-						v2f rcp = song_map_coord_to_play_field(ptr, obj->pos);
+						v2f rcp = song_map_coord_to_play_field(ptr, obj->real_pos);
 						if(obj->type == object_slider)
 						{
 							list_node *sn;

@@ -30,7 +30,7 @@ void approach_circle_draw(object *ptr)
         reltime >= 0
     )
         return;
-    v2f pos = song_map_coord_to_play_field(song, ptr->pos);
+    v2f pos = song_map_coord_to_play_field(song, ptr->real_pos);
     pos.x += ptr->wiggle_xoff;
     float scale =
         (

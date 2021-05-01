@@ -11,7 +11,7 @@ mania_note *mania_note_init(object *host_obj)
     ret->host_obj = host_obj;
     ret->lane = 0;
     
-    ret->host_obj->pos = V2F(SONG_PFW / 2, SONG_PFH / 2);
+    ret->host_obj->real_pos = V2F(SONG_PFW / 2, SONG_PFH / 2);
     return ret;
 }
 

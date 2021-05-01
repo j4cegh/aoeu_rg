@@ -32,7 +32,7 @@ void spinner_reset(spinner *ptr)
 
 float spinner_get_mouse_rotation(spinner *ptr)
 {
-    return rotate_towards(ptr->host_obj->pos, V2F(rg.mop_x, rg.mop_y));
+    return rotate_towards(ptr->host_obj->real_pos, V2F(rg.mop_x, rg.mop_y));
 }
 
 void spinner_update(spinner *ptr)
@@ -100,7 +100,7 @@ void spinner_render(spinner *ptr)
 {
     object *obj = ptr->host_obj;
     song *song = obj->host_song;
-    v2f mpos = song_map_coord_to_play_field(song, obj->pos);
+    v2f mpos = song_map_coord_to_play_field(song, obj->real_pos);
     float sc = song->object_size;
 	TIME_VAR reltime = obj->relative_time_ms;
 	TIME_VAR objlen = obj->length_time_ms;
