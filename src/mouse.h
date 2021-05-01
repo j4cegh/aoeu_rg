@@ -7,8 +7,8 @@
 
 typedef struct mouse_data
 {
-	float state_x;
-	float state_y;
+	int state_x;
+	int state_y;
 	float x;
 	float y;
 	float x_on_click;

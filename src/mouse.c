@@ -69,11 +69,15 @@ void mouse_events(SDL_Event event)
 		if(event.button.button == SDL_BUTTON_RIGHT) mouse.state_right = 0;
 	}
 
+	/*
 	if(event.type == SDL_MOUSEMOTION)
 	{
 		mouse.state_x = event.motion.x - 1;
 		mouse.state_y = event.motion.y - 1;
 	}
+	*/
+
+	SDL_GetMouseState(&mouse.state_x, &mouse.state_y);
 
 	if(event.type == SDL_MOUSEBUTTONUP) mouse.button_released = 1;
 }

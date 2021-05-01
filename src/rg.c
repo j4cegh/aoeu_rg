@@ -1712,8 +1712,9 @@ int main(int argc, char *argv[])
 					csc = clamp(scale_value_to(cems, 0, CURSOR_EXPAND_MS, CURSOR_EXPAND_MULTIPLIER, 1.0f), 1.0f, CURSOR_EXPAND_MULTIPLIER);
 				}
 				float cursor_sc = rg.song->object_size * csc;
-				v2f cpos = song_map_coord_to_play_field(rg.song, V2F(rg.mop_x, rg.mop_y));
+				v2f cpos = rg.replay_mode_enabled || rg.bot_enabled ? song_map_coord_to_play_field(rg.song, V2F(rg.mop_x, rg.mop_y)) : V2F(mouse.state_x, mouse.state_y);
 				textures_drawsc(rg.skin->cursor, cpos.x, cpos.y, cursor_sc, cursor_sc, col_white);
+
 			}
 
 			/*text3_fmt(0, 0, rg.win_width, 255, origin_left, origin_top, text3_justification_left, "ouendan click 1 frame 1 time ms: %.2f\nouendan ouendan click 2 frame 1 time ms: %.2f", rg.ouendan_click_1_frame_1_time_ms, rg.ouendan_click_2_frame_1_time_ms);*/
@@ -1735,6 +1736,8 @@ int main(int argc, char *argv[])
 		tick_framerate_display();
 
 		console_tick(cons_ptr);
+		
+		//GL_RECT2BOX(FLOATRECT(mouse.x - 5, mouse.y - 5, 10, 10), col_red);
 
 #ifndef RELEASE
 		if(rg.gui_view_xoff != 0.0f || rg.gui_view_yoff != 0.0f) GL_LINEBOX(FLOATRECT(-1, -1, rg.win_width + 1, rg.win_height + 1), col_yellow);
