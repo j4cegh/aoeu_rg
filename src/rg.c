@@ -277,8 +277,8 @@ void tick_fade()
 	float fade_ms = FADE_MS * (rg.screen == screen_song_select ? 2 : 1);
 	if(rg.frames == 0) timer_restart(rg.fade_clock);
 	float fade = timer_milliseconds(rg.fade_clock);
-	float fadec = clamp(fade, 0, fade_ms );
-	float ffade = apply_easing(easing_type_out, fadec, 0, 255, fade_ms);
+	float fadec = clamp(fade, 0, fade_ms);
+	float ffade = scale_value_to(fadec, 0, fade_ms, 0, 255);
 	if(rg.fade_state == fade_out) rg.fade_alpha = ffade;
 	else rg.fade_alpha = 255 - ffade;
 	color4 col = rg.screen == screen_song_select ? color4_gen_alpha(0, 0, 0, rg.fade_alpha) : color4_gen_alpha(0, 0, 0, rg.fade_alpha);
@@ -1215,23 +1215,16 @@ int main(int argc, char *argv[])
 				rg.win_width_mid,
 				(rg.win_height_mid / 4) + (ttex->surf->h / 2),
 				scale_value_to
-				(
-					apply_easing
+				(					
+					fmodf
 					(
-						easing_type_out,
-						fmodf
 						(
-							(
-								ae_music_handle_get_time_ms(rg.song->music)
-								-
-								rg.song->timing_section_start_ms
-								+
-								rg.song->song_global_offset
-							),
-							rg.song->beat_length_ms
+							ae_music_handle_get_time_ms(rg.song->music)
+							-
+							rg.song->timing_section_start_ms
+							+
+							rg.song->song_global_offset
 						),
-						rg.song->beat_length_ms,
-						rg.song->beat_length_ms,
 						rg.song->beat_length_ms
 					),
 					0.0f,

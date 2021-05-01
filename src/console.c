@@ -111,7 +111,7 @@ void console_free(console *ptr)
 
 void console_toggle(console *ptr)
 {
-	if(!ptr->not_toggled_yet && timer_milliseconds(ptr->anim_clock) < (ptr->activated ? CONSOLE_DROP_ANIM_TIME_MS : CONSOLE_LEV_ANIM_TIME_MS)) return;
+	//if(!ptr->not_toggled_yet && timer_milliseconds(ptr->anim_clock) < (ptr->activated ? CONSOLE_DROP_ANIM_TIME_MS : CONSOLE_LEV_ANIM_TIME_MS)) return;
 	ptr->not_toggled_yet = 0;
 	ptr->is_animating = 1;
 	ptr->activated = !ptr->activated;
@@ -196,8 +196,8 @@ void console_tick(console *ptr)
 				0,
 				anim_time_ms
 			);
-		if(ptr->activated) ptr->vertical_drop = apply_easing(easing_type_out_bounce, drop_time_ms, -cons_height, cons_height, CONSOLE_DROP_ANIM_TIME_MS);
-		else ptr->vertical_drop = apply_easing(easing_type_in, drop_time_ms, 0, -cons_height, CONSOLE_LEV_ANIM_TIME_MS);
+		if(ptr->activated) ptr->vertical_drop = scale_value_to(drop_time_ms, 0, CONSOLE_DROP_ANIM_TIME_MS, -cons_height, 0);
+		else ptr->vertical_drop = scale_value_to(drop_time_ms, 0, CONSOLE_LEV_ANIM_TIME_MS, 0, -cons_height);
 
 		if(ptr->vertical_drop != 0) ptr->is_animating = 1;
 		else ptr->is_animating = 0;
@@ -320,27 +320,7 @@ void console_tick(console *ptr)
 				255
 			);
 		
-		float tx =
-			(
-				PADDING
-				+
-				100
-				-
-				apply_easing
-				(
-					easing_type_out_bounce,
-					clamp
-					(
-						timer_milliseconds(m->anim_timer),
-						0,
-						CONSOLE_MSG_SLIDE_ANIM_MS
-					),
-					0,
-					100,
-					CONSOLE_MSG_SLIDE_ANIM_MS
-				)
-			);
-		text_set_position(m->text, tx, ypos);
+		text_set_position(m->text, 0, ypos);
 		text_render(m->text);
 		++rl_lim;
 	}

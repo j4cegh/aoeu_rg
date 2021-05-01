@@ -72,45 +72,6 @@ char *sha256(char *data);
 void sha256into(char *into, char *data);
 char *sha256_free_data(char *data);
 
-/* animation */
-typedef enum easing_type
-{
-	easing_type_in,
-	easing_type_out,
-	easing_type_in_out,
-	easing_type_in_cubic,
-	easing_type_out_cubic,
-	easing_type_in_out_cubic,
-	easing_type_in_quart,
-	easing_type_out_quart,
-	easing_type_in_out_quart,
-	easing_type_in_quint,
-	easing_type_out_quint,
-	easing_type_in_out_quint,
-	easing_type_in_sine,
-	easing_type_out_sine,
-	easing_type_in_out_sine,
-	easing_type_in_expo,
-	easing_type_out_expo,
-	easing_type_in_out_expo,
-	easing_type_in_circ,
-	easing_type_out_circ,
-	easing_type_in_out_circ,
-	easing_type_in_elastic,
-	easing_type_out_elastic,
-	easing_type_out_elastic_half,
-	easing_type_out_elastic_quarter,
-	easing_type_in_out_elastic,
-	easing_type_in_back,
-	easing_type_out_back,
-	easing_type_in_out_back,
-	easing_type_in_bounce,
-	easing_type_out_bounce,
-	easing_type_in_out_bounce
-} easing_type;
-
-double apply_easing(easing_type easing, double time, double initial, double change, double duration);
-
 #ifndef SERV
 void open_url(char *url);
 #endif
