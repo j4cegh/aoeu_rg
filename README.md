@@ -1,6 +1,6 @@
 # aoeu's rhythm game
 
-A "online" rhythm game programmed in C.
+An "online" rhythm game programmed in C.
 It has Ouendan and Mania modes so far.
 
 # Compiling
